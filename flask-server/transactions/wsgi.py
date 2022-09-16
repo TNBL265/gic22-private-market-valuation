@@ -1,4 +1,7 @@
-from . import dynamo_app
+from flask import Flask
 
-if __name__ == '__main__':
-    dynamo_app.run(host='0.0.0.0', port=5002, debug=False)
+from .controller import dynamo_blueprint
+
+
+dynamo_app = Flask(__name__)
+dynamo_app.register_blueprint(dynamo_blueprint)

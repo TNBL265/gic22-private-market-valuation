@@ -1,4 +1,11 @@
-from . import rds_app
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-if __name__ == '__main__':
-    rds_app.run(host='0.0.0.0', port=5001, debug=False)
+from .config import Config
+from .controller import rds_blueprint
+
+
+rds_app = Flask(__name__)
+rds_app.config.from_object(Config)
+rds_app.register_blueprint(rds_blueprint)
+rds_db = SQLAlchemy(rds_app)
