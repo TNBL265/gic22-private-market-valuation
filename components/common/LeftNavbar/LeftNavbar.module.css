@@ -1,0 +1,52 @@
+.container {
+    height: 100vh;
+    width: clamp(280px, 10vw, 280px);
+    padding: 1rem;
+    background: var(--navBarBg);
+    box-shadow: 1px 0 20px 0 var(--navBarBg);
+    z-index: 1;
+    position: fixed;
+    color: #a9b7d0;
+}
+
+.logo {
+    font-weight: 600;
+    font-size: 2rem;
+    padding-bottom: 2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.tab {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-bottom: 1rem;
+    font-size: 1rem;
+    opacity: 1;
+}
+
+.active {
+    color: white;
+}
+
+.tabLink {
+    padding-left: 1rem;
+}
+
+.tabIcon {
+    padding: 0.5rem;
+}
+
+.tab:hover {
+    opacity: 1;
+    color: #1dc4e9;
+    transition: 0.2s;
+    opacity: 0.6;
+}
