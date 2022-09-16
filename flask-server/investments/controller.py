@@ -19,7 +19,7 @@ def investment_data_controller():
 
     elif request.method == 'POST':
         data_obj = json.loads(request.data)
-        insert_count = insert_one_investment_data(data_obj)
-        return make_response(json.dumps(insert_count), 200)
+        insert_one_investment_data(data_obj)
+        return make_response(json.dumps("Inserted"), 200)
     else:
         return make_response(json.dumps("Request type not supported"), 400)
