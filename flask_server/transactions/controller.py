@@ -25,3 +25,11 @@ def transactions_controller():
         return make_response(json.dumps(create_a_transaction(data_obj)), 200)
     else:
         return make_response(json.dumps("Request type not supported"), 400)
+
+
+@transactions_blueprint.route("/transactions/instruments/<int:instrumentId>", methods=["GET"])
+def transactions_instruments_controller(instrumentId):
+    if request.method == "GET":
+        return make_response(json.dumps(retrieve_list_of_transactions_on_instrumentId(instrumentId)), 200)
+    else:
+        return make_response(json.dumps("Request type not supported"), 400)
