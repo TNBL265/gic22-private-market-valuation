@@ -19,3 +19,13 @@ export interface InstrumentsRowData {
   instrumentCurrency: string
   isTradeable: string
 }
+
+export interface InstrumentFormData {
+  instrumentName: string
+  instrumentType: string
+  country: string
+  sector: string
+  instrumentCurrency: string
+  isTradeable: string
+  notes?: string
+}

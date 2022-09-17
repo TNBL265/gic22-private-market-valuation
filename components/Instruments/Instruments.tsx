@@ -3,15 +3,19 @@ import { useEffect, useState } from 'react'
 import Section from '../common/Section/Section'
 import Table from '../common/Table/Table'
 
-import { headings } from './constants'
-import { InstrumentsData, InstrumentsRowData } from '../../types/instruments'
+import { headings, selectFields } from './constants'
+import {
+  InstrumentFormData,
+  InstrumentsData,
+  InstrumentsRowData,
+} from '../../types/instruments'
 import { sampleData } from './sampleData'
 import { requiredFields, optionalFields } from './constants'
 import { INSTRUMENTS_BASE_URL } from './constants'
 
 import styles from './Instruments.module.css'
 import { parseInstrumentsViewData } from '../common/Parser/Parser'
-import { TextField } from '@mui/material'
+import { MenuItem, TextField } from '@mui/material'
 import { Box } from '@mui/material'
 import axios from 'axios'
 
@@ -22,6 +26,29 @@ const Instruments = () => {
     InstrumentsRowData[]
   >([])
   const [instruments, setInstruments] = useState<InstrumentsRowData[]>([])
+  const [formData, setFormData] = useState<InstrumentFormData | null>(null)
+
+  const handleInput = (evt: any) => {
+    const name = evt.target.name
+    const newValue = evt.target.value
+    setFormData({ ...formData, [name]: newValue })
+  }
+
+  const handleSubmit = async (evt: any) => {
+    evt.preventDefault()
+
+    let data = { data: formData }
+    //check if all the required inputs are entered
+    console.log(data)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+    const res = await axios
+      .post(INSTRUMENTS_BASE_URL, data, { headers })
+      .then((res) => {
+        console.log(res)
+      })
+  }
 
   const displayInstrumentForm = () => {
     return (
@@ -39,20 +66,48 @@ const Instruments = () => {
               <TextField
                 required
                 id="outlined-required"
+                name={requiredField.name}
                 label={requiredField.label}
                 key={requiredField.label}
+                onChange={handleInput}
               />
+            )
+          })}
+          {selectFields.map((selectField) => {
+            return (
+              <TextField
+                select
+                id="outlined-required"
+                name={selectField.name}
+                value={'True'}
+                label={selectField.label}
+                key={selectField.label}
+                onChange={handleInput}
+              >
+                <MenuItem key={'True'} value={'True'}>
+                  {'True'}
+                </MenuItem>
+                <MenuItem key={'False'} value={'False'}>
+                  {'False'}
+                </MenuItem>
+              </TextField>
             )
           })}
           {optionalFields.map((optionalField) => {
             return (
               <TextField
                 id="outlined-helperText"
+                name={optionalField.name}
                 label={optionalField.label}
                 key={optionalField.label}
               />
             )
           })}
+        </div>
+        <div className={styles.button}>
+          <div className={styles.text} onClick={handleSubmit}>
+            Submit
+          </div>
         </div>
       </Box>
     )
