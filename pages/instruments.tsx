@@ -3,7 +3,7 @@ import Instruments from '../components/Instruments/Instruments'
 
 const instruments = () => {
   return (
-    <div className="page__container">
+    <div className="page__container flex relative">
       <div className="page__left">
         <LeftNavbar />
       </div>
