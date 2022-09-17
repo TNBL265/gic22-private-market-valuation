@@ -1,8 +1,11 @@
 import { MouseEventHandler, useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import { Button, Modal } from '@mui/material'
-import Image from 'next/image'
+import { Button } from '@mui/material'
+
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+
+import styles from './CustomTableRow.module.css'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,6 +45,11 @@ const CustomTableRow = ({ row }: any) => {
           </StyledTableCell>
         )
       })}
+      <div className={styles.button}>
+        <StyledTableCell align="right">
+          <Button>More Info</Button>
+        </StyledTableCell>
+      </div>
     </>
   )
 }
