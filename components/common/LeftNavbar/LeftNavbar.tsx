@@ -53,7 +53,7 @@ const LeftNavbar = () => {
               key={name}
               onClick={() => router.push(`/${name.toLowerCase()}`)}
             >
-              <div className={styles.tabIcon}>
+              <div className={styles.tabIcon + " hover:"}>
                 <Icon className="text-my-blue-2"/>
               </div>
               {isExpanded && (
