@@ -90,8 +90,8 @@ const Instruments = () => {
                 select
                 id="outlined-required"
                 name={selectField.name}
-                value={'True'}
                 label={selectField.label}
+                value={formData?.isTradeable == 'True' ? 'True' : 'False'}
                 key={selectField.label}
                 onChange={handleInput}
               >
@@ -160,9 +160,7 @@ const Instruments = () => {
         height={'80vh'}
         width={'50vw'}
         handleClose={() => handleOpenModal(false)}
-      >
-        <div>{displayInstrumentForm()}</div>
-      </Modal>
+      ></Modal>
       <div className={styles.body}>
         <div className={styles.section}>
           <Section title="Add Instrument" size={'L'}>
@@ -176,6 +174,7 @@ const Instruments = () => {
                   Add an Instrument
                 </div>
               </div>
+              <div>{displayInstrumentForm()}</div>
             </>
           </Section>
         </div>
