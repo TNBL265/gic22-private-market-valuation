@@ -21,12 +21,12 @@ def create_an_instrument(data):
     db.session.close()
     return out
 
+
 def mass_create_instruments(data_obj):
     for d in data_obj:
         out = create_an_instrument(d)
-        # if "error" in out:
-
     return out
+
 
 def retrieve_an_instrument(instrumentId):
     instrument = InstrumentData.query.get(instrumentId)
