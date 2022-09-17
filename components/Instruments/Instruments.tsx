@@ -18,6 +18,7 @@ import { parseInstrumentsViewData } from '../common/Parser/Parser'
 import { MenuItem, TextField } from '@mui/material'
 import { Box } from '@mui/material'
 import axios from 'axios'
+import Modal from '../common/Modal/Modal'
 
 const Instruments = () => {
   const [userSearchInput, setUserSearchInput] = useState<string>('')
@@ -27,6 +28,16 @@ const Instruments = () => {
   >([])
   const [instruments, setInstruments] = useState<InstrumentsRowData[]>([])
   const [formData, setFormData] = useState<InstrumentFormData | null>(null)
+
+  const [open, setOpen] = useState<boolean>(false)
+  const [modal, setModal] = useState(<div></div>)
+  const handleOpenModal = (open: boolean) => {
+    if (open) {
+      setOpen(true)
+    } else {
+      setOpen(false)
+    }
+  }
 
   const handleInput = (evt: any) => {
     const name = evt.target.name
@@ -144,15 +155,27 @@ const Instruments = () => {
 
   return (
     <div className={styles.container}>
+      <Modal
+        open={open}
+        height={'80vh'}
+        width={'50vw'}
+        handleClose={() => handleOpenModal(false)}
+      >
+        <div>{displayInstrumentForm()}</div>
+      </Modal>
       <div className={styles.body}>
         <div className={styles.section}>
           <Section title="Add Instrument" size={'L'}>
             {/* Add instruments form */}
             <>
               <div className={styles.button}>
-                <div className={styles.text}>Add an Instrument</div>
+                <div
+                  className={styles.text}
+                  onClick={() => handleOpenModal(true)}
+                >
+                  Add an Instrument
+                </div>
               </div>
-              <div>{displayInstrumentForm()}</div>
             </>
           </Section>
         </div>
