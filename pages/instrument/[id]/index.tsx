@@ -95,6 +95,7 @@ const InstrumentBuySell = ({ latestMV }: any) => {
 }
 
 const InstrumentDetails = ({ instDetails }: any) => {
+  console.log(instDetails)
   const Entry = ({ label, value }: any) => {
     return (
       <div className="flex justify-between text-sm font-semibold my-2">
@@ -113,7 +114,10 @@ const InstrumentDetails = ({ instDetails }: any) => {
           <Entry label="Currency" value={instDetails['instrumentCurrency']} />
           <Entry label="Sector" value={instDetails['sector']} />
           <Entry label="Type" value={instDetails['instrumentType']} />
-          <Entry label="Tradeable" value={instDetails['isTradeable']} />
+          <Entry
+            label="Tradeable"
+            value={instDetails['isTradeable'] ? 'True' : 'False'}
+          />
           <Entry label="Created At" value={instDetails['createdAt']} />
           <Entry label="Modified At" value={instDetails['modifiedAt']} />
           <div className="text-my-gray-2 text-sm font-semibold my-2">Notes</div>
@@ -148,27 +152,34 @@ const InstrumentPage = () => {
   const [instDetails, setInstDetails] = useState(null)
   const [instMVs, setInstMVs] = useState([])
   const [editMode, setEditMode] = useState(false)
+  const [instrumentId, setInstrumentId] = useState<string>('')
 
   const [showDelModal, setShowDelModal] = useState(false)
   const [dataType, setDataType] = useState('MV')
   // const { id } = router.query
-  const fetchInstrumentData = async (id: number) => {
-    let res = (await getInstrumentById(id))?.data
-    setInstDetails(res)
+
+  const displayTransactions = () => {
+    return <Transactions instrumentId={instrumentId} />
   }
-  const fetchInstrumentMV = async (id: number) => {
-    let res = (await getMarketValuesById(id))?.data
-    setInstMVs(res)
-  }
+
   useEffect(() => {
     console.log(router.query)
     const id = router.query.id as string
+    setInstrumentId(id)
     console.log(`id ${id}`)
-    setTimeout(() => {
-      fetchInstrumentData((id as unknown) as number)
-      fetchInstrumentMV((id as unknown) as number)
-    }, 100)
-  }, [])
+    const fetchInstrumentData = async (id: number) => {
+      let res = (await getInstrumentById(id))?.data
+      console.log(res)
+      setInstDetails(res)
+    }
+    const fetchInstrumentMV = async (id: number) => {
+      let res = (await getMarketValuesById(id))?.data
+      setInstMVs(res)
+    }
+
+    fetchInstrumentData((id as unknown) as number)
+    fetchInstrumentMV((id as unknown) as number)
+  }, [router.isReady])
 
   return (
     <div className="page__container flex relative ">
@@ -242,7 +253,7 @@ const InstrumentPage = () => {
                 />
               </div>
               <div className={BlockClassName}>
-                <Transactions />
+                {instrumentId?.length > 0 && displayTransactions()}
               </div>
             </div>
             <div className="shrink-0 w-1/3 ml-2">
@@ -284,11 +295,5 @@ const InstrumentPage = () => {
     </div>
   )
 }
-// export async function getStaticPaths() {
-//     const paths = ["abc"];
-//     return {
-//       paths,
-//       fallback: false,
-//     };
-//   }
+
 export default InstrumentPage
