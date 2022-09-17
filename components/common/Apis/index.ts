@@ -60,6 +60,17 @@ const uploadInstruments = async (data: any) => {
     }
 }
 
+const delInstrument = async (id: number) => {
+    console.log(`id: ${id}`)
+    try {
+        let res = await axios.delete(`${BASE_URL}/instruments/${id}`);
+        console.log(res)
+        return res
+    } catch (e) {
+        return null
+    }
+}
+
 const getMarketValues = commonGet('market-values');
 
 const getMarketValuesById = async (id: number) => {
@@ -116,6 +127,7 @@ export {
     getInstruments,
     getInstrumentById,
     postInstruments,
+    delInstrument,
     uploadInstruments,
     getMarketValues,
     getMarketValuesById,

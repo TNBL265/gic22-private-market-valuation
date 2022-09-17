@@ -6,13 +6,32 @@ import Transactions from '../../../components/Transactions/Transactions'
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { Button } from "@mui/material";
-import { getInstrumentById, getMarketValues, getMarketValuesById } from "../../../components/common/Apis";
-import { useEffect, useState } from "react";
+import { Button, Fade, IconButton, Modal } from "@mui/material";
+import { delInstrument, getInstrumentById, getMarketValues, getMarketValuesById } from "../../../components/common/Apis";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const BlockClassName = "p-4 rounded-2xl bg-white relative z-10";
 
-const InstrumentBuySell = () => {
+const InstrumentBuySell = ({ latestMV }: any) => {
+  const [qty, setQty] = useState(0);
+  const [amt, setAmt] = useState(0);
+  console.log(latestMV)
+  let mv = latestMV ? latestMV["marketValue"] : 0
+  console.log(`mv: ${mv}`)
+  const handleQtyChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    let val = e.target.value as unknown as number;
+    console.log(`handleQtyChange: ${val}`)
+    setQty(val)
+    setAmt(val * mv)
+    console.log(`New amt ${amt}`)
+  }
+
+  const handleAmtChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    let val = e.target.value as unknown as number;
+    setAmt(val)
+    setQty(Math.floor(val / mv))
+  }
+
   return (
     <>
       <h2 className="text-xl my-2">Buy/Sell</h2>
@@ -26,7 +45,9 @@ const InstrumentBuySell = () => {
           InputLabelProps={{
             shrink: true,
           }}
+          value={qty}
           className="my-3"
+          onChange={handleQtyChange}
         />
       </div>
       <div>
@@ -34,10 +55,12 @@ const InstrumentBuySell = () => {
           id="amt"
           label="Amount"
           type="number"
+          value={amt}
           InputLabelProps={{
             shrink: true,
           }}
           className="my-3"
+          onChange={handleAmtChange}
         /></div>
       <div className="flex justify-around">
         <Button variant="outlined" color="success" className="text-my-green-1 border-my-green-1 mr-8">BUY</Button>
@@ -79,12 +102,33 @@ const InstrumentDetails = ({ instDetails }: any) => {
   );
 };
 
+const getGraphTitle = (s: string) => {
+  switch (s) {
+    case "MV":
+      return "Market Value"
 
+    case "PnL":
+      return "Profit and Loss"
+  }
+}
+
+const parseGraphMVData = (data: any) => {
+  return data?.map((el: any) => {
+    return {
+      x: el["marketValueDate"],
+      y: el["marketValue"]
+    }
+  })
+}
 
 const InstrumentPage = () => {
   const router = useRouter();
   const [instDetails, setInstDetails] = useState(null);
-  const [instMVs, setInstMVs] = useState(null);
+  const [instMVs, setInstMVs] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+
+  const [showDelModal, setShowDelModal] = useState(false);
+  const [dataType, setDataType] = useState("MV")
   // const { id } = router.query
   const fetchInstrumentData = async (id: number) => {
     let res = (await getInstrumentById(id))?.data;
@@ -98,8 +142,11 @@ const InstrumentPage = () => {
     console.log(router.query)
     const id = router.query.id as string;
     console.log(`id ${id}`);
-    fetchInstrumentData(id as unknown as number)
-    fetchInstrumentMV(id as unknown as number)
+    setTimeout(() => {
+      fetchInstrumentData(id as unknown as number)
+      fetchInstrumentMV(id as unknown as number)
+    }, 100)
+
   }, [])
 
   return (
@@ -113,8 +160,24 @@ const InstrumentPage = () => {
             <h1 className="text-5xl text-white font-bold mr-2">
               {instDetails ? instDetails["instrumentName"] : "Loading..."}
             </h1>
-            <EditIcon className="text-white w-8 h-8 mr-2" />
-            <DeleteForeverIcon className="text-white w-8 h-8" />
+            <IconButton
+              // color="primary"
+              size="large"
+              aria-label="Upload instrument data"
+              className="text-my-blue-2"
+              onClick={() => { setEditMode(true) }}
+            >
+              <EditIcon className="text-white w-8 h-8 mr-2" />
+            </IconButton>
+            <IconButton
+              // color="primary"
+              size="large"
+              aria-label="Upload instrument data"
+              className="text-my-blue-2"
+              onClick={() => { setShowDelModal(true) }}
+            >
+              <DeleteForeverIcon className="text-white w-8 h-8" />
+            </IconButton>
           </div>
           <div className="flex items-center justify-between my-6">
             <div className="p-4 bg-white rounded-2xl flex items-center grow mr-4">
@@ -148,7 +211,7 @@ const InstrumentPage = () => {
           <div className="flex">
             <div className="grow mr-2 w-2/3">
               <div className={BlockClassName + " mb-4"}>
-                <InstrumentChart />
+                <InstrumentChart title={getGraphTitle(dataType)} data={parseGraphMVData(instMVs)} />
               </div>
               <div className={BlockClassName}>
                 <Transactions />
@@ -159,13 +222,30 @@ const InstrumentPage = () => {
                 <InstrumentDetails instDetails={instDetails} />
               </div>
               <div className={BlockClassName}>
-                <InstrumentBuySell />
+                <InstrumentBuySell latestMV={instMVs ? instMVs[-1] : null} />
               </div>
             </div>
           </div>
         </div>
         <div className="absolute top-0 left-0 w-full bg-zinc-800 rounded-tl-2xl h-[20%] z-0"></div>
       </div>
+      <Modal
+        open={showDelModal}
+        onClose={() => { setShowDelModal(false) }}
+        closeAfterTransition
+        className="h-full w-full flex justify-center items-center"
+      >
+        <Fade in={showDelModal}>
+          <div className="bg-white h-1/8 w-1/5 p-8 rounded-2xl flex flex-col">
+            <div className="text-2xl font-bold mb-8">Are you sure?</div>
+            <Button variant="outlined" className='text-my-red-1 border-my-red-1' onClick={() => {
+              instDetails ? delInstrument(instDetails["instrumentId"]) : 1
+              window.location.replace("/instruments");
+            }}>Totally~</Button>
+          </div>
+        </Fade>
+      </Modal>
+
     </div>
   );
 };

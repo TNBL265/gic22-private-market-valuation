@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-    
+
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const series = [{
@@ -253,102 +253,164 @@ for (let i = 1; i < seriesData.length; i++) {
   let p_change = series[0].data[i].y[3] - series[0].data[i - 1].y[3]
   seriesLinear.push(p_change);
 }
-const ChartOptions = {
-  series: [
-    {
-      data: seriesData,
-    },
-  ],
-  options: {
+// const ChartOptions = {
+//   series: [
+//     {
+//       data: seriesData,
+//     },
+//   ],
+//   options: {
+//     chart: {
+//       type: 'candlestick',
+//       height: 350
+//     },
+//     title: {
+//       text: 'CandleStick Chart',
+//       align: 'left'
+//     },
+//     xaxis: {
+//       type: 'datetime'
+//     },
+//     yaxis: {
+//       tooltip: {
+//         enabled: true
+//       }
+//     }
+//   },  
+//   seriesBar: [{
+//     name: 'volume',
+//     data: seriesData
+//   }],
+//   optionsBar: {
+//     chart: {
+//       height: 160,
+//       type: 'bar',
+//       brush: {
+//         enabled: true,
+//         target: 'candles'
+//       },
+//       selection: {
+//         enabled: true,
+//         xaxis: {
+//           min: new Date(1538778600000),
+//           max: new Date(1538884800000),
+//         },
+//         fill: {
+//           color: '#ccc',
+//           opacity: 0.4
+//         },
+//         stroke: {
+//           color: '#0D47A1',
+//         }
+//       },
+//     },
+//     dataLabels: {
+//       enabled: false
+//     },
+//     plotOptions: {
+//       bar: {
+//         columnWidth: '80%',
+//         colors: {
+//           ranges: [{
+//             from: -1000,
+//             to: 0,
+//             color: '#F15B46'
+//           }, {
+//             from: 1,
+//             to: 10000,
+//             color: '#FEB019'
+//           }],
+
+//         },
+//       }
+//     },
+//     stroke: {
+//       width: 0
+//     },
+//     xaxis: {
+//       type: 'datetime',
+//       axisBorder: {
+//         offsetX: 13
+//       }
+//     },
+//     yaxis: {
+//       labels: {
+//         show: false
+//       }
+//     }
+//   },
+// };
+
+
+const InstrumentChart = ({ title, data }: any) => {
+  const ChartOptions = {
     chart: {
-      type: 'candlestick',
-      height: 350
-    },
-    title: {
-      text: 'CandleStick Chart',
-      align: 'left'
-    },
-    xaxis: {
-      type: 'datetime'
-    },
-    yaxis: {
-      tooltip: {
-        enabled: true
+      type: 'area',
+      stacked: false,
+      height: 350,
+      zoom: {
+        type: 'x',
+        enabled: true,
+        autoScaleYaxis: true
+      },
+      toolbar: {
+        autoSelected: 'zoom'
       }
-    }
-  },  
-  seriesBar: [{
-    name: 'volume',
-    data: seriesData
-  }],
-  optionsBar: {
-    chart: {
-      height: 160,
-      type: 'bar',
-      brush: {
-        enabled: true,
-        target: 'candles'
-      },
-      selection: {
-        enabled: true,
-        xaxis: {
-          min: new Date(1538778600000),
-          max: new Date(1538884800000),
-        },
-        fill: {
-          color: '#ccc',
-          opacity: 0.4
-        },
-        stroke: {
-          color: '#0D47A1',
-        }
-      },
     },
     dataLabels: {
       enabled: false
     },
-    plotOptions: {
-      bar: {
-        columnWidth: '80%',
-        colors: {
-          ranges: [{
-            from: -1000,
-            to: 0,
-            color: '#F15B46'
-          }, {
-            from: 1,
-            to: 10000,
-            color: '#FEB019'
-          }],
-    
-        },
-      }
+    markers: {
+      size: 0,
     },
-    stroke: {
-      width: 0
+    title: {
+      text: title,
+      align: 'left'
     },
-    xaxis: {
-      type: 'datetime',
-      axisBorder: {
-        offsetX: 13
-      }
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        inverseColors: false,
+        opacityFrom: 0.5,
+        opacityTo: 0,
+        stops: [0, 90, 100]
+      },
     },
     yaxis: {
       labels: {
-        show: false
+        formatter: function (val: number) {
+          return (val / 1000000).toFixed(0);
+        },
+      },
+      title: {
+        text: 'Price'
+      },
+    },
+    xaxis: {
+      type: 'datetime',
+    },
+    tooltip: {
+      shared: false,
+      y: {
+        formatter: function (val: number) {
+          return (val / 1000000).toFixed(0)
+        }
       }
     }
-  },
-};
+  }
+  let series = [{
+    name: title,
+    data: data
+  }]
 
-const InstrumentChart = () => {
   return (
     <div>
       <div >
         <Chart
-          options={ChartOptions.options as any}
-          series={ChartOptions.series}
-          type="candlestick" height={290}
+          options={ChartOptions as any}
+          series={series}
+          type="area" height={290}
         />
       </div>
       {/* <div id="chart-bar">
