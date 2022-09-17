@@ -103,7 +103,7 @@ const Instruments = () => {
                   setUserSearchInput(event.target.value)
                   handleSearch(event.target.value)
                 }}
-                onFocus={() => setSearchPlaceholder('e.g The Savana...')}
+                onFocus={() => setSearchPlaceholder('e.g Armstrong...')}
                 onBlur={() => setSearchPlaceholder('Search')}
               />
               <Table

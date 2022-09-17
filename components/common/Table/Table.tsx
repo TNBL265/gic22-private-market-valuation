@@ -185,7 +185,7 @@ export default function CustomizedTables({
             : rows
           ).map((row1, idx) => {
             return (
-              <StyledTableRow key={page * rowsPerPage + idx} onSelect={handleSelect}>
+              <StyledTableRow key={row1.instrumentName} onSelect={handleSelect}>
                 <CustomTableRow row={row1} />
               </StyledTableRow>
             )

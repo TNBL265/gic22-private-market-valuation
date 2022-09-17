@@ -38,6 +38,7 @@ next-env.d.ts
 # flask
 .idea/
 **/env
+**/venv
 **/__pycache__
 **/*.db
 **/.ipynb_checkpoints
