@@ -10,14 +10,18 @@ const InstrumentPage = () => {
   // const { id } = router.query
   console.log(`id ${id}`);
   return (
-    <div className="page__container">
-      <div className="page__left">
+    <div className="page__container flex relative ">
+      {/* <div className=""> */}
         <LeftNavbar />
-      </div>
-      <div className="page__body">
+      {/* </div> */}
+      <div className="page__body grow">
+        <div className="bg-black rounded-t-2xl h-[20%]"></div>
+        <div className="p-2">
         <div className={BlockClassName}>
           <InstrumentChart />
         </div>
+        </div>
+        
       </div>
     </div>
   );

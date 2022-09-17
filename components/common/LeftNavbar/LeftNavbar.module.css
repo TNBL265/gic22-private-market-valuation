@@ -5,7 +5,7 @@
     /* background: var(--navBarBg); */
     /* box-shadow: 1px 0 20px 0 var(--navBarBg); */
     z-index: 1;
-    position: fixed;
+    /* position: fixed; */
     color: #a9b7d0;
 }
 

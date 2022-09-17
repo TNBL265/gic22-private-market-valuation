@@ -28,7 +28,7 @@ const LeftNavbar = () => {
   // {styles.container}
   return (
     <div
-      className={styles.container + " bg-my-gray-4"}
+      className={styles.container + " relative bg-my-gray-4 shrink-0"}
       onMouseEnter={() => setShowExpandBtn(true)}
       onMouseLeave={() => setShowExpandBtn(false)}
     >
@@ -54,7 +54,7 @@ const LeftNavbar = () => {
               onClick={() => router.push(`/${name.toLowerCase()}`)}
             >
               <div className={styles.tabIcon}>
-                <Icon />
+                <Icon className="text-my-blue-2"/>
               </div>
               {isExpanded && (
                 <div className={styles.tabLink}>

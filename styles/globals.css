@@ -16,10 +16,10 @@ body {
   background-color: #f4f7fa !important;
 }
 
-.page__body {
+/* .page__body {
   margin-left: clamp(280px, 10vw, 280px);
   padding: 1rem;
-}
+} */
 
 a {
   color: inherit;
