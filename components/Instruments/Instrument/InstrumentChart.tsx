@@ -250,7 +250,8 @@ const series = [{
 const seriesData = series[0].data;
 const seriesLinear = [];
 for (let i = 1; i < seriesData.length; i++) {
-  seriesLinear.push(series[0].data[i].y[3] - series[0].data[i - 1].y[3]);
+  let p_change = series[0].data[i].y[3] - series[0].data[i - 1].y[3]
+  seriesLinear.push(p_change);
 }
 const ChartOptions = {
   series: [
@@ -276,25 +277,87 @@ const ChartOptions = {
       }
     }
   },  
+  seriesBar: [{
+    name: 'volume',
+    data: seriesData
+  }],
+  optionsBar: {
+    chart: {
+      height: 160,
+      type: 'bar',
+      brush: {
+        enabled: true,
+        target: 'candles'
+      },
+      selection: {
+        enabled: true,
+        xaxis: {
+          min: new Date(1538778600000),
+          max: new Date(1538884800000),
+        },
+        fill: {
+          color: '#ccc',
+          opacity: 0.4
+        },
+        stroke: {
+          color: '#0D47A1',
+        }
+      },
+    },
+    dataLabels: {
+      enabled: false
+    },
+    plotOptions: {
+      bar: {
+        columnWidth: '80%',
+        colors: {
+          ranges: [{
+            from: -1000,
+            to: 0,
+            color: '#F15B46'
+          }, {
+            from: 1,
+            to: 10000,
+            color: '#FEB019'
+          }],
+    
+        },
+      }
+    },
+    stroke: {
+      width: 0
+    },
+    xaxis: {
+      type: 'datetime',
+      axisBorder: {
+        offsetX: 13
+      }
+    },
+    yaxis: {
+      labels: {
+        show: false
+      }
+    }
+  },
 };
 
 const InstrumentChart = () => {
   return (
     <div>
-      <div>
+      <div className="p-4 rounded-lg bg-white">
         <Chart
           options={ChartOptions.options as any}
           series={ChartOptions.series}
           type="candlestick" height={290}
         />
       </div>
-      <div id="chart-bar">
-        {/* <Chart
+      {/* <div id="chart-bar">
+        <Chart
           options={ChartOptions.optionsBar as any}
           series={ChartOptions.seriesBar}
           type="bar" height={160}
-        /> */}
-      </div>
+        />
+      </div> */}
     </div>
   );
 };
