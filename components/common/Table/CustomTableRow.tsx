@@ -37,11 +37,7 @@ const CustomTableRow = ({ row, buttonName, clickHandler }: any) => {
         }
         return (
           <StyledTableCell align="right" key={idx}>
-            {idx == 3 && tableRow[attribute] == 'YES' ? (
-              <div style={{ fontWeight: 600 }}>{tableRow[attribute]}</div>
-            ) : (
-              tableRow[attribute]
-            )}
+            {tableRow[attribute]}
           </StyledTableCell>
         )
       })}
