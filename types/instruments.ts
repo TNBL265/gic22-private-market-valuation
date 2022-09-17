@@ -1,5 +1,5 @@
 export interface InstrumentsData {
-  instrumentId?: number
+  instrumentId: number
   instrumentName: string
   instrumentType: string
   country: string
@@ -12,6 +12,7 @@ export interface InstrumentsData {
 }
 
 export interface InstrumentsRowData {
+  instrumentId: number
   instrumentName: string
   instrumentType: string
   country: string

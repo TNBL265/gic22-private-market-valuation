@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useRouter } from 'next/router'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -12,25 +13,9 @@ import LastPageIcon from '@mui/icons-material/LastPage'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 
-import {
-  Box,
-  Button,
-  IconButton,
-  TableFooter,
-  TablePagination,
-} from '@mui/material'
+import { Box, IconButton, TableFooter, TablePagination } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import CustomTableRow from './CustomTableRow'
-
-interface TableProps {
-  columns: number
-  tableHeaders: string[]
-  rows: any[]
-  width?: string
-  selectedRowID?: string
-  handleSelect?: React.ReactEventHandler<HTMLTableRowElement>
-  buttonName?: string
-}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -132,21 +117,33 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   )
 }
 
+interface TableProps {
+  columns: number
+  tableHeaders: string[]
+  rows: any[]
+  width?: string
+  selectedRowID?: string
+  handleSelect?: React.ReactEventHandler<HTMLTableRowElement>
+  handleClick?: any
+  buttonName?: string
+  idColumn?: string
+  skipColumns?: string[]
+}
+
 export default function CustomizedTables({
   columns,
   tableHeaders,
   rows,
   width,
-  selectedRowID,
   handleSelect,
+  handleClick,
   buttonName,
+  idColumn,
+  skipColumns,
 }: TableProps) {
+  const router = useRouter()
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -160,6 +157,17 @@ export default function CustomizedTables({
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
+  }
+
+  const displayFilteredRow = (row1: any) => {
+    const { instrumentId, ...filteredRow } = row1
+    return (
+      <CustomTableRow
+        row={filteredRow}
+        buttonName={buttonName}
+        clickHandler={() => handleClick(instrumentId)}
+      />
+    )
   }
 
   return (
@@ -188,7 +196,7 @@ export default function CustomizedTables({
           ).map((row1, idx) => {
             return (
               <StyledTableRow key={row1.instrumentName} onSelect={handleSelect}>
-                <CustomTableRow row={row1} buttonName={buttonName} />
+                {displayFilteredRow(row1)}
               </StyledTableRow>
             )
           })}

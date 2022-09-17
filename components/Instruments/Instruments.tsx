@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-
+import { useRouter } from 'next/router'
 import Section from '../common/Section/Section'
 import Table from '../common/Table/Table'
 
@@ -19,16 +19,17 @@ import { Button, IconButton, MenuItem, TextField } from '@mui/material'
 import { Box } from '@mui/material'
 import axios from 'axios'
 
-import { getInstruments } from "../common/Apis"
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { getInstruments } from '../common/Apis'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 // import Modal from '../common/Modal/Modal'
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
+import Modal from '@mui/material/Modal'
+import Fade from '@mui/material/Fade'
 import InstrUpload from './InstrumentsUpload'
 
 const Instruments = () => {
+  const router = useRouter()
   const [userSearchInput, setUserSearchInput] = useState<string>('')
   const [searchPlaceholder, setSearchPlaceholder] = useState<string>('Search')
   const [queriedInstruments, setQueriedInstruments] = useState<
@@ -44,8 +45,8 @@ const Instruments = () => {
     isTradeable: 'False',
   })
   const [showForm, setShowForm] = useState<boolean>(false)
-  const [file, setFile] = useState(null);
-  const [fileType, setFileType] = useState<string>("");
+  const [file, setFile] = useState(null)
+  const [fileType, setFileType] = useState<string>('')
   const [showUploadModal, setUploadModal] = useState<boolean>(false)
 
   const toggleModal = () => {
@@ -56,6 +57,11 @@ const Instruments = () => {
     const name = evt.target.name
     const newValue = evt.target.value
     setFormData({ ...formData, [name]: newValue })
+  }
+
+  const handleRowClick = (id: number) => {
+    const route = `/instruments/${id}`
+    window.open(route, '_blank', 'noopener,noreferrer')
   }
 
   const handleSubmit = async (evt: any) => {
@@ -155,7 +161,7 @@ const Instruments = () => {
       console.log(INSTRUMENTS_BASE_URL)
       const data: InstrumentsData[] = (await getInstruments())?.data
       if (data == undefined || data.length == 0) {
-        return;
+        return
       }
       console.log(data)
       const fetchedData = parseInstrumentsViewData(data)
@@ -188,7 +194,7 @@ const Instruments = () => {
           <Section title="Browse Instruments" size={'L'}>
             {/* View the instruments based on search */}
             <div>
-              <div className='flex justify-between'>
+              <div className="flex justify-between">
                 <input
                   id="searchBar"
                   value={userSearchInput}
@@ -202,8 +208,14 @@ const Instruments = () => {
                   onFocus={() => setSearchPlaceholder('e.g Armstrong...')}
                   onBlur={() => setSearchPlaceholder('Search')}
                 />
-                <IconButton color="primary" size="large" aria-label="Upload instrument data" className='text-my-blue-2' onClick={toggleModal}>
-                  <CloudUploadIcon className='w-8 h-8' />
+                <IconButton
+                  color="primary"
+                  size="large"
+                  aria-label="Upload instrument data"
+                  className="text-my-blue-2"
+                  onClick={toggleModal}
+                >
+                  <CloudUploadIcon className="w-8 h-8" />
                 </IconButton>
               </div>
               <Table
@@ -212,12 +224,18 @@ const Instruments = () => {
                 rows={queriedInstruments}
                 width="65vw"
                 buttonName="More Info"
+                idColumn={'instrumentId'}
+                skipColumns={['instrumentId']}
+                handleClick={handleRowClick}
               ></Table>
             </div>
           </Section>
         </div>
       </div>
-      <InstrUpload showUploadModal={showUploadModal} toggleModal={toggleModal}/>
+      <InstrUpload
+        showUploadModal={showUploadModal}
+        toggleModal={toggleModal}
+      />
     </div>
   )
 }

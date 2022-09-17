@@ -8,9 +8,31 @@ const headers = {
     'Content-Type': 'application/json',
   }
 
+const commonGet = (path: string)=>{
+    return async () => {
+        try {
+            let res = await axios.get(`${BASE_URL}/${path}`);
+            console.log(res)
+            return res["data"]
+        } catch (e) {
+            return null
+        }
+    }
+}
+
 const getInstruments = async () => {
     try {
         let res = await axios.get(`${BASE_URL}/instruments`);
+        console.log(res)
+        return res["data"]
+    } catch (e) {
+        return null
+    }
+}
+
+const getInstrumentById = async (id: number) => {
+    try {
+        let res = await axios.get(`${BASE_URL}/instruments/${id}`);
         console.log(res)
         return res["data"]
     } catch (e) {
@@ -38,6 +60,18 @@ const uploadInstruments = async (data: any) => {
     }
 }
 
+const getMarketValues = commonGet('market-values');
+
+const getMarketValuesById = async (id: number) => {
+    try {
+        let res = await axios.get(`${BASE_URL}/market-values/${id}`);
+        console.log(res)
+        return res["data"]
+    } catch (e) {
+        return null
+    }
+}
+
 const postMarketValues = async (data: any) => {
     try {
         let res = await axios.post(`${BASE_URL}/market-values`,data,{headers});
@@ -58,12 +92,33 @@ const getTransactions = async () => {
     }
 }
 
+const getTransactionsById = async (id: number) => {
+    try {
+        let res = await axios.get(`${BASE_URL}/transactions/${id}`);
+        console.log(res)
+        return res["data"]
+    } catch (e) {
+        return null
+    }
+}
 
+const postTransactions = async (data: any) => {
+    try {
+        let res = await axios.post(`${BASE_URL}/transactions`,data,{headers});
+        console.log(res)
+        return res["data"]
+    } catch (e) {
+        return null
+    }
+}
 
 export {
     getInstruments,
+    getInstrumentById,
     postInstruments,
     uploadInstruments,
+    getMarketValues,
+    getMarketValuesById,
     postMarketValues,
     getTransactions
 }

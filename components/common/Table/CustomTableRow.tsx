@@ -17,7 +17,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }))
 
-const CustomTableRow = ({ row, buttonName }: any) => {
+const CustomTableRow = ({ row, buttonName, clickHandler }: any) => {
   const [tableRow, setTableRow] = useState(row)
   const [newRow, setNewRow] = useState()
   const [isLoading, setIsLoading] = useState(false)
@@ -37,16 +37,12 @@ const CustomTableRow = ({ row, buttonName }: any) => {
         }
         return (
           <StyledTableCell align="right" key={idx}>
-            {idx == 3 && tableRow[attribute] == 'YES' ? (
-              <div style={{ fontWeight: 600 }}>{tableRow[attribute]}</div>
-            ) : (
-              tableRow[attribute]
-            )}
+            {tableRow[attribute]}
           </StyledTableCell>
         )
       })}
       <StyledTableCell align="right">
-        <Button>{buttonName}</Button>
+        <Button onClick={clickHandler}>{buttonName}</Button>
       </StyledTableCell>
     </>
   )

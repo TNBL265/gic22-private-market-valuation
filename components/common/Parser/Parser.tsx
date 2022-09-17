@@ -7,6 +7,7 @@ export const parseInstrumentsViewData = (
   const instrumentsViewData: InstrumentsRowData[] = instrumentsData.map(
     (instrument) => {
       return {
+        instrumentId: instrument.instrumentId,
         instrumentName: instrument.instrumentName,
         instrumentType: instrument.instrumentType,
         country: instrument.country,
