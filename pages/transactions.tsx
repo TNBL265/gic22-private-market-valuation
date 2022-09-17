@@ -3,11 +3,11 @@ import Transactions from '../components/Transactions/Transactions'
 
 const transactions = () => {
   return (
-    <div className="page__container">
+    <div className="page__container flex relative">
       <div className="page__left">
         <LeftNavbar />
       </div>
-      <div className="page__body">
+      <div className="page__body grow">
         <Transactions />
       </div>
     </div>
