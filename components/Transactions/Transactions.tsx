@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TransactionRowData } from '../../types/transactions'
+import { getTransactions } from '../common/Apis'
 import { parseTransactionViewData } from '../common/Parser/Parser'
 import Section from '../common/Section/Section'
 import Table from '../common/Table/Table'
@@ -15,10 +16,23 @@ const Transactions = () => {
   >([])
   const [transactions, setTransactions] = useState<TransactionRowData[]>([])
 
+  const fetchData = async () => {
+    let res = (await getTransactions())?.data;
+    if(res == undefined || res.length == 0){
+      return;
+    }
+    console.log(res);
+    const fetchedData = parseTransactionViewData(res)
+    setQueriedTransactions(fetchedData), setTransactions(fetchedData)
+
+  }
+
   useEffect(() => {
     // fetch Data here
-    const fetchedData = parseTransactionViewData(sampleData)
-    setQueriedTransactions(fetchedData), setTransactions(fetchedData)
+    fetchData();
+    
+    // const fetchedData = parseTransactionViewData(sampleData)
+    // setQueriedTransactions(fetchedData), setTransactions(fetchedData)
   },[])
 
   return (

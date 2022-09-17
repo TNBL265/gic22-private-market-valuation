@@ -2,8 +2,13 @@ from database import db, InstrumentData
 from utils import format_datetime
 
 
-def create_an_instrument(data_obj):
-    data = data_obj["data"]
+def create_an_instrument(data):
+    expectedKeys = ["instrumentName", "instrumentType", "country","sector", "instrumentCurrency", "isTradeable", "notes"]
+    for k in expectedKeys:
+        if k not in data:
+            return {
+                "error": "missing fields"
+            }
     data = InstrumentData(data["instrumentName"], data["instrumentType"], data["country"], data["sector"],
                           data["instrumentCurrency"], bool(data["isTradeable"]), data.get("notes", None))
     db.session.add(data)
@@ -16,6 +21,12 @@ def create_an_instrument(data_obj):
     db.session.close()
     return out
 
+def mass_create_instruments(data_obj):
+    for d in data_obj:
+        out = create_an_instrument(d)
+        # if "error" in out:
+
+    return out
 
 def retrieve_an_instrument(instrumentId):
     instrument = InstrumentData.query.get(instrumentId)
