@@ -7,34 +7,39 @@ import Transactions from '../../../components/Transactions/Transactions'
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Button } from "@mui/material";
+import { getInstrumentById, getMarketValues, getMarketValuesById } from "../../../components/common/Apis";
+import { useEffect, useState } from "react";
 
 const BlockClassName = "p-4 rounded-2xl bg-white relative z-10";
 
 const InstrumentBuySell = () => {
   return (
     <>
-      <h2>Buy/Sell</h2>
+      <h2 className="text-xl my-2">Buy/Sell</h2>
       {/* <div> */}
       {/* <div className="text-sm font-semibold my-2">Quantity:</div> */}
-      <TextField
-        id="qty"
-        label="Quantity"
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        className="my-3"
-      />
-      <TextField
-        id="amt"
-        label="Amount"
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        className="my-3"
-      />
-      <div className="flex justify-center">
+      <div>
+        <TextField
+          id="qty"
+          label="Quantity"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          className="my-3"
+        />
+      </div>
+      <div>
+        <TextField
+          id="amt"
+          label="Amount"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          className="my-3"
+        /></div>
+      <div className="flex justify-around">
         <Button variant="outlined" color="success" className="text-my-green-1 border-my-green-1 mr-8">BUY</Button>
         <Button variant="outlined" color="info" className="text-my-orange-1 border-my-orange-1 ml-8">SELL</Button>
       </div>
@@ -43,7 +48,7 @@ const InstrumentBuySell = () => {
   );
 };
 
-const InstrumentDetails = () => {
+const InstrumentDetails = ({ instDetails }: any) => {
   const Entry = ({ label, value }: any) => {
     return (
       <div className="flex justify-between text-sm font-semibold my-2">
@@ -56,25 +61,46 @@ const InstrumentDetails = () => {
   return (
     <>
       <h2 className="text-2xl mb-2">Details</h2>
-      <Entry label="Country" value="USA" />
-      <Entry label="Currency" value="USA" />
-      <Entry label="Sector" value="USA" />
-      <Entry label="Type" value="USA" />
-      <Entry label="Tradeable" value="Yes" />
-      <Entry label="Created At" value="Yes" />
-      <Entry label="Modified At" value="Yes" />
-      {/* <Entry label="Tradeable" value="Yes"/> */}
-      <div className="text-my-gray-2 text-sm font-semibold my-2">Notes</div>
-      <p>Private Equity; Financials; Tradable Instrument</p>
+      {instDetails && (
+        <>
+          <Entry label="Country" value={instDetails["country"]} />
+          <Entry label="Currency" value={instDetails["instrumentCurrency"]} />
+          <Entry label="Sector" value={instDetails["sector"]} />
+          <Entry label="Type" value={instDetails["instrumentType"]} />
+          <Entry label="Tradeable" value={instDetails["isTradeable"]} />
+          <Entry label="Created At" value={instDetails["createdAt"]} />
+          <Entry label="Modified At" value={instDetails["modifiedAt"]} />
+          <div className="text-my-gray-2 text-sm font-semibold my-2">Notes</div>
+          <p>{instDetails["notes"]} </p>
+        </>
+      )}
+
     </>
   );
 };
 
+
+
 const InstrumentPage = () => {
   const router = useRouter();
-  const id = router.query.id as string;
+  const [instDetails, setInstDetails] = useState(null);
+  const [instMVs, setInstMVs] = useState(null);
   // const { id } = router.query
-  console.log(`id ${id}`);
+  const fetchInstrumentData = async (id: number) => {
+    let res = (await getInstrumentById(id))?.data;
+    setInstDetails(res);
+  }
+  const fetchInstrumentMV = async (id: number) => {
+    let res = (await getMarketValuesById(id))?.data;
+    setInstMVs(res);
+  }
+  useEffect(() => {
+    const id = router.query.id as string;
+    console.log(`id ${id}`);
+    fetchInstrumentData(id as unknown as number)
+    fetchInstrumentMV(id as unknown as number)
+  }, [])
+
   return (
     <div className="page__container flex relative ">
       {/* <div className=""> */}
@@ -84,7 +110,7 @@ const InstrumentPage = () => {
         <div className="p-8 z-10 relative">
           <div className="flex items-center my-6">
             <h1 className="text-5xl text-white font-bold mr-2">
-              Armstrong - Jacobi
+              {instDetails ? instDetails["instrumentName"] : "Loading..."}
             </h1>
             <EditIcon className="text-white w-8 h-8 mr-2" />
             <DeleteForeverIcon className="text-white w-8 h-8" />
@@ -120,16 +146,16 @@ const InstrumentPage = () => {
           </div>
           <div className="flex">
             <div className="grow mr-2 w-2/3">
-              <div className={BlockClassName  + " mb-4"}>
+              <div className={BlockClassName + " mb-4"}>
                 <InstrumentChart />
               </div>
-              <div  className={BlockClassName}>
+              <div className={BlockClassName}>
                 <Transactions />
               </div>
             </div>
             <div className="shrink-0 w-1/3 ml-2">
               <div className={BlockClassName + " mb-4"}>
-                <InstrumentDetails />
+                <InstrumentDetails instDetails={instDetails} />
               </div>
               <div className={BlockClassName}>
                 <InstrumentBuySell />
