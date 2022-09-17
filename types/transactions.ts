@@ -3,9 +3,10 @@ import { ReactElement } from 'react'
 export interface TransactionData {
   transactionId: number
   instrumentId: number
+  instrumentName?: string
   quantity: number
-  transactionData: string
-  transactionAmount: string
+  transactionDate: string
+  transactionAmount: number
   transactionType: string
   transactionCurrency: string
   isCancelled: boolean
@@ -15,7 +16,7 @@ export interface TransactionData {
 
 export interface TransactionRowData {
   instrumentName: string
-  transactionType: ReactElement,
+  transactionType: ReactElement
   currency: string
   amount: number
   quantity: number

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { TransactionRowData } from '../../types/transactions'
+import { TransactionData, TransactionRowData } from '../../types/transactions'
 import { getTransactions } from '../common/Apis'
+import Modal from '../common/Modal/Modal'
 import { parseTransactionViewData } from '../common/Parser/Parser'
 import Section from '../common/Section/Section'
 import Table from '../common/Table/Table'
 
 import { headings } from './constants'
+import { convertTransactionDataToModal } from './helper'
 import { sampleData } from './sampleData'
 
 import styles from './Transactions.module.css'
@@ -14,29 +16,54 @@ const Transactions = () => {
   const [queriedTransactions, setQueriedTransactions] = useState<
     TransactionRowData[]
   >([])
-  const [transactions, setTransactions] = useState<TransactionRowData[]>([])
-
-  const fetchData = async () => {
-    let res = (await getTransactions())?.data;
-    if(res == undefined || res.length == 0){
-      return;
+  const [transactions, setTransactions] = useState<TransactionData[]>([])
+  const [open, setOpen] = useState<boolean>(false)
+  const [transactionData, setTransactionData] = useState(<div></div>)
+  const handleOpenModal = (open: boolean, transaction: TransactionData) => {
+    if (open) {
+      setOpen(true)
+      setTransactionData(
+        <div>{convertTransactionDataToModal(transaction)}</div>,
+      )
+    } else {
+      setOpen(false)
     }
-    console.log(res);
-    const fetchedData = parseTransactionViewData(res)
-    setQueriedTransactions(fetchedData), setTransactions(fetchedData)
+  }
 
+  const handleClick = (id: number) => {
+    handleOpenModal(
+      true,
+      transactions.filter((transaction) => transaction.transactionId == id)[0],
+    )
   }
 
   useEffect(() => {
     // fetch Data here
-    fetchData();
-    
+    const fetchData = async () => {
+      let res = (await getTransactions())?.data
+      if (res == undefined || res.length == 0) {
+        return
+      }
+      console.log(res)
+      const fetchedData = parseTransactionViewData(res)
+      setQueriedTransactions(fetchedData), setTransactions(res)
+    }
+    fetchData()
+
     // const fetchedData = parseTransactionViewData(sampleData)
     // setQueriedTransactions(fetchedData), setTransactions(fetchedData)
-  },[])
+  }, [])
 
   return (
     <div className={styles.container}>
+      <Modal
+        open={open}
+        height={'80vh'}
+        width={'50vw'}
+        handleClose={() => handleOpenModal(false, ' ')}
+      >
+        {transactionData}
+      </Modal>
       <div className={styles.body}>
         <div className={styles.section}>
           <Section title={'Your Transactions'} size={'L'}>
@@ -47,6 +74,7 @@ const Transactions = () => {
                 rows={queriedTransactions}
                 // width="65vw"
                 buttonName="View"
+                handleClick={handleClick}
               ></Table>
             </div>
           </Section>

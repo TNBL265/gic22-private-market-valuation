@@ -60,7 +60,7 @@ const Instruments = () => {
   }
 
   const handleRowClick = (id: number) => {
-    const route = `/instruments/${id}`
+    const route = `/instrument/${id}`
     window.open(route, '_blank', 'noopener,noreferrer')
   }
 

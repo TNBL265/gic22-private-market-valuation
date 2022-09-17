@@ -1,5 +1,8 @@
 import { InstrumentsData, InstrumentsRowData } from '../../../types/instruments'
-import { TransactionRowData } from '../../../types/transactions'
+import {
+  TransactionData,
+  TransactionRowData,
+} from '../../../types/transactions'
 
 export const parseInstrumentsViewData = (
   instrumentsData: InstrumentsData[],
@@ -20,24 +23,31 @@ export const parseInstrumentsViewData = (
   return instrumentsViewData
 }
 
-export const parseTransactionViewData = (transactionData: any) => {
+export const parseTransactionViewData = (
+  transactionData: TransactionData[],
+) => {
   const transactionViewData: TransactionRowData[] = transactionData.map(
-    (transaction: any) => {
+    (transaction) => {
       return {
-        instrumentName: transaction.instrumentName,
+        instrumentName: transaction.instrumentName
+          ? transaction.instrumentName
+          : ' ',
+        transactionId: transaction.transactionId,
         transactionType: (
           <div
             style={{
               color: `${
-                transaction.transactionType == 'Buy' ? 'green' : 'red'
+                transaction.transactionType.toLowerCase() == 'buy'
+                  ? 'green'
+                  : 'red'
               }`,
             }}
           >
             {transaction.transactionType}
           </div>
         ),
-        currency: transaction.currency,
-        amount: transaction.amount,
+        currency: transaction.transactionCurrency,
+        amount: transaction.transactionAmount,
         quantity: transaction.quantity,
         createdAt: transaction.createdAt,
         modifiedAt: transaction.modifiedAt,
@@ -46,3 +56,5 @@ export const parseTransactionViewData = (transactionData: any) => {
   )
   return transactionViewData
 }
+
+
