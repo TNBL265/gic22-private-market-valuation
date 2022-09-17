@@ -57,3 +57,16 @@ def delete_a_transaction(transactionId):
     db.session.remove()
     db.session.close()
     return "Deleted"
+
+
+def retrieve_list_of_transactions_on_instrumentId(instrumentId):
+    transaction_list = TransactionData.query.filter_by(instrumentId=instrumentId).all()
+    data_list = []
+    for transaction_data in transaction_list:
+        data = transaction_data.to_map_as_date_string()
+        instrumentId = data["instrumentId"]
+        instrument = InstrumentData.query.filter_by(instrumentId=instrumentId).first()
+        instrumentName = instrument.instrumentName
+        data["instrumentName"] = instrumentName
+        data_list.append(data)
+    return {"data": data_list}

@@ -10,7 +10,7 @@ class InstrumentData(db.Model):
     __tablename__: str = "instrument_table"
     __table_args__ = {"tend_existing": True}
 
-    instrumentId = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    instrumentId = db.Column(db.Integer, db.Identity(start=201, cycle=True), primary_key=True)
     instrumentName = db.Column(db.String, nullable=False)
     instrumentType = db.Column(db.String, nullable=False)
     country = db.Column(db.String, nullable=False)
@@ -51,7 +51,7 @@ class MarketValueData(db.Model):
     __tablename__: str = "market_value_table"
     __table_args__ = {"tend_existing": True}
 
-    marketValueId = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    marketValueId = db.Column(db.Integer, db.Identity(start=6031, cycle=True), primary_key=True)
     instrumentId = db.Column(db.Integer, db.ForeignKey('instrument_table.instrumentId'), nullable=False)
     marketValue = db.Column(db.Float, nullable=False)
     marketValueDate = db.Column(db.DateTime, nullable=False)
@@ -77,7 +77,7 @@ class TransactionData(db.Model):
     __tablename__: str = "transaction_table"
     __table_args__ = {"tend_existing": True}
 
-    transactionId = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    transactionId = db.Column(db.Integer, db.Identity(start=4954, cycle=True), primary_key=True)
     instrumentId = db.Column(db.Integer, db.ForeignKey('instrument_table.instrumentId'), nullable=False)
     quantity = db.Column(db.Float, nullable=False)
     transactionDate = db.Column(db.DateTime, nullable=False)
