@@ -6,7 +6,7 @@ instruments_db = SQLAlchemy()
 
 
 class InstrumentData(instruments_db.Model):
-    __tablename__: str = "instrument_data"
+    __tablename__: str = "instrument_table"
     __table_args__ = {"tend_existing": True}
 
     instrumentId = instruments_db.Column(instruments_db.Integer, primary_key=True, autoincrement=True)
@@ -19,6 +19,8 @@ class InstrumentData(instruments_db.Model):
     createdAt = instruments_db.Column(instruments_db.DateTime(timezone=True), server_default=func.now())
     modifiedAt = instruments_db.Column(instruments_db.DateTime(timezone=True), onupdate=func.now())
     notes = instruments_db.Column(instruments_db.String, nullable=True)
+    market_value = instruments_db.relationship('MarketValue', lazy='select',
+                                               backref=instruments_db.backref('instrument', lazy='joined'))
 
     def __init__(self, instrumentName, instrumentType, country, sector, instrumentCurrency, isTradeable, notes):
         self.instrumentName = instrumentName
@@ -105,5 +107,3 @@ def delete_an_instrument(instrumentId):
 
 def format_datetime(datetime: datetime):
     return datetime.strftime("%Y-%m-%d %H:%M:%S") if datetime else ""
-
-

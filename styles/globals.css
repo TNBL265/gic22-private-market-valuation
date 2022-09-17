@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   --navBarBg: #071d49;
   --navBarColor: white;

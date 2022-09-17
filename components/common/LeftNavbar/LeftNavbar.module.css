@@ -1,9 +1,9 @@
 .container {
     height: 100vh;
-    width: clamp(280px, 10vw, 280px);
+    /* width: clamp(280px, 10vw, 280px); */
     padding: 1rem;
-    background: var(--navBarBg);
-    box-shadow: 1px 0 20px 0 var(--navBarBg);
+    /* background: var(--navBarBg); */
+    /* box-shadow: 1px 0 20px 0 var(--navBarBg); */
     z-index: 1;
     position: fixed;
     color: #a9b7d0;
@@ -13,7 +13,7 @@
     font-weight: 600;
     font-size: 2rem;
     padding-bottom: 2rem;
-    color: white;
+    /* color: white; */
     display: flex;
     align-items: center;
 }
