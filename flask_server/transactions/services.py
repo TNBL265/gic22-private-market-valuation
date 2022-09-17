@@ -31,13 +31,24 @@ def create_a_transaction(data_obj):
 def retrieve_a_transaction(transactionId):
     transaction = TransactionData.query.get(transactionId)
     data = transaction.to_map_as_date_string() if transaction else "Not Available"
+    instrumentId = data["instrumentId"]
+    instrument = InstrumentData.query.filter_by(instrumentId=instrumentId).first()
+    instrumentName = instrument.instrumentName
+    data["instrumentName"] = instrumentName
     return {"data": data}
 
 
 def retrieve_list_of_transactions():
     transaction_list = TransactionData.query.all()
-    transaction_list = [transaction_data.to_map_as_date_string() for transaction_data in transaction_list]
-    return {"data": transaction_list}
+    data_list = []
+    for transaction_data in transaction_list:
+        data = transaction_data.to_map_as_date_string()
+        instrumentId = data["instrumentId"]
+        instrument = InstrumentData.query.filter_by(instrumentId=instrumentId).first()
+        instrumentName = instrument.instrumentName
+        data["instrumentName"] = instrumentName
+        data_list.append(data)
+    return {"data": data_list}
 
 
 def delete_a_transaction(transactionId):

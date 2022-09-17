@@ -19,4 +19,11 @@ export const requiredFields = [
 export const selectFields = [{ name: 'isTradeable', label: 'isTradeable' }]
 export const optionalFields = [{ name: 'notes', label: 'Notes' }]
 
-export const INSTRUMENTS_BASE_URL = 'http://localhost:3000/api/instruments'
+// export const API_BASE_URL = 
+
+
+
+export const INSTRUMENTS_BASE_URL = 'http://127.0.0.1:5001' //'http://localhost:3000/api/instruments'
+export const TRANSACTIONS_BASE_URL = 'http://127.0.0.1:5003'
+export const MARKET_BASE_URL = 'http://127.0.0.1:5002'
+

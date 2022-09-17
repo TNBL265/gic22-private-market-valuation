@@ -8,8 +8,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Button } from "@mui/material";
 
-
-
 const BlockClassName = "p-4 rounded-2xl bg-white relative z-10";
 
 const InstrumentBuySell = () => {
