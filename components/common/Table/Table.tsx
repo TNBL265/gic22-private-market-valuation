@@ -160,12 +160,14 @@ export default function CustomizedTables({
   }
 
   const displayFilteredRow = (row1: any) => {
-    const { instrumentId, ...filteredRow } = row1
+    const { instrumentId, transactionId, ...filteredRow } = row1
     return (
       <CustomTableRow
         row={filteredRow}
         buttonName={buttonName}
-        clickHandler={() => handleClick(instrumentId)}
+        clickHandler={() =>
+          handleClick(instrumentId ? instrumentId : transactionId)
+        }
       />
     )
   }
