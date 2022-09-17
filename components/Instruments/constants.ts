@@ -18,3 +18,5 @@ export const requiredFields = [
 ]
 
 export const optionalFields = [{ label: 'Note' }]
+
+export const INSTRUMENTS_BASE_URL = "http://localhost:3000/api/instruments"

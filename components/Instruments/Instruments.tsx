@@ -7,11 +7,13 @@ import { headings } from './constants'
 import { InstrumentsData, InstrumentsRowData } from '../../types/instruments'
 import { sampleData } from './sampleData'
 import { requiredFields, optionalFields } from './constants'
+import { INSTRUMENTS_BASE_URL } from './constants'
 
 import styles from './Instruments.module.css'
 import { parseInstrumentsViewData } from '../common/Parser/Parser'
 import { TextField } from '@mui/material'
 import { Box } from '@mui/material'
+import axios from 'axios'
 
 const Instruments = () => {
   const [userSearchInput, setUserSearchInput] = useState<string>('')
@@ -70,9 +72,19 @@ const Instruments = () => {
 
   useEffect(() => {
     //fetch data
-    const fetchedData = parseInstrumentsViewData(sampleData)
-    setInstruments(fetchedData)
-    setQueriedInstruments(fetchedData)
+    const fetchData = async () => {
+      console.log(INSTRUMENTS_BASE_URL)
+      const data: InstrumentsData[] = (
+        await axios.get(INSTRUMENTS_BASE_URL).then((res) => {
+          return res
+        })
+      ).data.data
+      console.log(data)
+      const fetchedData = parseInstrumentsViewData(data)
+      setInstruments(fetchedData)
+      setQueriedInstruments(fetchedData)
+    }
+    fetchData()
   }, [])
 
   return (
