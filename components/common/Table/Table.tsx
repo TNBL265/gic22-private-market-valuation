@@ -29,6 +29,7 @@ interface TableProps {
   width?: string
   selectedRowID?: string
   handleSelect?: React.ReactEventHandler<HTMLTableRowElement>
+  buttonName?: string
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -138,6 +139,7 @@ export default function CustomizedTables({
   width,
   selectedRowID,
   handleSelect,
+  buttonName,
 }: TableProps) {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
@@ -186,7 +188,7 @@ export default function CustomizedTables({
           ).map((row1, idx) => {
             return (
               <StyledTableRow key={row1.instrumentName} onSelect={handleSelect}>
-                <CustomTableRow row={row1} />
+                <CustomTableRow row={row1} buttonName={buttonName} />
               </StyledTableRow>
             )
           })}
