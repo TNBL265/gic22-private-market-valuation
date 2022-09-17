@@ -4,13 +4,15 @@ python wsgi.py
 ```
 - Send sample HTTP request:
 ```shell
-curl -X POST http://localhost:5003/transactions \
+curl -X POST http://localhost:5000/transactions \
 -H "Content-Type: application/json" \
 -d '{"data":{"instrumentId":"2","quantity":"10","transactionAmount":"-500000","transactionType":"BUY","transactionDate":"2022-02-01"}}'
 
-curl -X GET http://localhost:5003/transactions/1           
+curl -X GET http://localhost:5000/transactions/1           
 
-curl -X GET http://localhost:5003/transactions
+curl -X GET http://localhost:5000/transactions
 
-curl -X DELETE http://localhost:5003/transactions/1    
+curl -X DELETE http://localhost:5000/transactions/1    
+
+curl -X GET http://localhost:5000/transactions/instruments/2
 ```
