@@ -28,15 +28,7 @@ const Instruments = () => {
   >([])
   const [instruments, setInstruments] = useState<InstrumentsRowData[]>([])
   const [formData, setFormData] = useState<InstrumentFormData | null>(null)
-
-  const [open, setOpen] = useState<boolean>(false)
-  const handleOpenModal = (open: boolean) => {
-    if (open) {
-      setOpen(true)
-    } else {
-      setOpen(false)
-    }
-  }
+  const [showForm, setShowForm] = useState<boolean>(false)
 
   const handleInput = (evt: any) => {
     const name = evt.target.name
@@ -65,7 +57,7 @@ const Instruments = () => {
       <Box
         component="form"
         sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
+          '& .MuiTextField-root': { mt: 2, mb: 1, width: '25ch' },
         }}
         noValidate
         autoComplete="off"
@@ -154,12 +146,6 @@ const Instruments = () => {
 
   return (
     <div className={styles.container}>
-      <Modal
-        open={open}
-        height={'80vh'}
-        width={'50vw'}
-        handleClose={() => handleOpenModal(false)}
-      ></Modal>
       <div className={styles.body}>
         <div className={styles.section}>
           <Section title="Add Instrument" size={'L'}>
@@ -168,12 +154,12 @@ const Instruments = () => {
               <div className={styles.button}>
                 <div
                   className={styles.text}
-                  onClick={() => handleOpenModal(true)}
+                  onClick={() => setShowForm((prevData) => !prevData)}
                 >
-                  Add an Instrument
+                  {showForm ? 'Cancel' : 'Add'}
                 </div>
               </div>
-              <div>{displayInstrumentForm()}</div>
+              <div>{showForm && displayInstrumentForm()}</div>
             </>
           </Section>
         </div>
