@@ -30,7 +30,6 @@ const Instruments = () => {
   const [formData, setFormData] = useState<InstrumentFormData | null>(null)
 
   const [open, setOpen] = useState<boolean>(false)
-  const [modal, setModal] = useState(<div></div>)
   const handleOpenModal = (open: boolean) => {
     if (open) {
       setOpen(true)
@@ -201,6 +200,7 @@ const Instruments = () => {
                 tableHeaders={headings.map((heading) => heading.name)}
                 rows={queriedInstruments}
                 width="65vw"
+                buttonName="More Info"
               ></Table>
             </div>
           </Section>

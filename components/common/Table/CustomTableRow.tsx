@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import { Button } from '@mui/material'
 
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
 import styles from './CustomTableRow.module.css'
 
@@ -17,7 +17,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }))
 
-const CustomTableRow = ({ row }: any) => {
+const CustomTableRow = ({ row, buttonName }: any) => {
   const [tableRow, setTableRow] = useState(row)
   const [newRow, setNewRow] = useState()
   const [isLoading, setIsLoading] = useState(false)
@@ -45,11 +45,9 @@ const CustomTableRow = ({ row }: any) => {
           </StyledTableCell>
         )
       })}
-      <div className={styles.button}>
-        <StyledTableCell align="right">
-          <Button>More Info</Button>
-        </StyledTableCell>
-      </div>
+      <StyledTableCell align="right">
+        <Button>{buttonName}</Button>
+      </StyledTableCell>
     </>
   )
 }
