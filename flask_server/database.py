@@ -21,7 +21,7 @@ class InstrumentData(db.Model):
     modifiedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     notes = db.Column(db.String, nullable=True)
     market_value = db.relationship('MarketValueData', lazy='select',
-                                               backref=db.backref('instrument', lazy='joined'))
+                                   backref=db.backref('instrument', lazy='joined'))
 
     def __init__(self, instrumentName, instrumentType, country, sector, instrumentCurrency, isTradeable, notes):
         self.instrumentName = instrumentName
@@ -52,8 +52,7 @@ class MarketValueData(db.Model):
     __table_args__ = {"tend_existing": True}
 
     marketValueId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    instrumentId = db.Column(db.Integer,
-                                           db.ForeignKey('instrument_table.instrumentId'), nullable=False)
+    instrumentId = db.Column(db.Integer, db.ForeignKey('instrument_table.instrumentId'), nullable=False)
     marketValue = db.Column(db.Float, nullable=False)
     marketValueDate = db.Column(db.DateTime, nullable=False)
     createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
@@ -69,6 +68,44 @@ class MarketValueData(db.Model):
             "instrumentId": self.instrumentId,
             "marketValue": self.marketValue,
             "marketValueDate": format_datetime(self.marketValueDate),
+            "createdAt": format_datetime(self.createdAt),
+            "modifiedAt": format_datetime(self.modifiedAt),
+        }
+
+
+class TransactionData(db.Model):
+    __tablename__: str = "transaction_table"
+    __table_args__ = {"tend_existing": True}
+
+    transactionId = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    instrumentId = db.Column(db.Integer, db.ForeignKey('instrument_table.instrumentId'), nullable=False)
+    quantity = db.Column(db.Float, nullable=False)
+    transactionDate = db.Column(db.DateTime, nullable=False)
+    transactionAmount = db.Column(db.Float, nullable=False)
+    transactionType = db.Column(db.String, nullable=False)
+    transactionCurrency = db.Column(db.String, nullable=False)
+    isCancelled = db.Column(db.Boolean, default=False)
+    createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    modifiedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+
+    def __init__(self, instrumentId, quantity, transactionDate, transactionAmount,
+                 transactionType, transactionCurrency):
+        self.instrumentId = instrumentId
+        self.quantity = quantity
+        self.transactionDate = transactionDate
+        self.transactionAmount = transactionAmount
+        self.transactionType = transactionType
+        self.transactionCurrency = transactionCurrency
+
+    def to_map_as_date_string(self):
+        return {
+            "transactionId": self.transactionId,
+            "instrumentId": self.instrumentId,
+            "quantity": self.quantity,
+            "transactionDate": format_datetime(self.transactionDate),
+            "transactionType": self.transactionType,
+            "transactionCurrency": self.transactionCurrency,
+            "isCancelled": self.isCancelled,
             "createdAt": format_datetime(self.createdAt),
             "modifiedAt": format_datetime(self.modifiedAt),
         }

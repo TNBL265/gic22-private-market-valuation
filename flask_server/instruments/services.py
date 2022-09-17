@@ -1,6 +1,7 @@
 from database import db, InstrumentData
 from utils import format_datetime
 
+
 def create_an_instrument(data_obj):
     data = data_obj["data"]
     data = InstrumentData(data["instrumentName"], data["instrumentType"], data["country"], data["sector"],
@@ -31,6 +32,8 @@ def retrieve_list_of_instruments():
 def update_an_instrument(instrumentId, data_obj):
     instrument = InstrumentData.query.filter_by(instrumentId=instrumentId).first()
     data = data_obj["data"]
+    if not instrument:
+        return "Instrument does not exist"
     try:
         instrument.instrumentName = data["instrumentName"]
         instrument.country = data["country"]
