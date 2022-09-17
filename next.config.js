@@ -23,6 +23,14 @@ module.exports = () => {
         source: "/api/transactions/:path*",
         destination: "http://18.138.81.156:5000/transactions/:path*",
       },
+      {
+        source: "/api/investments/:path*",
+        destination: "http://18.142.121.89:5000/investments/:path*",
+      },
+      {
+        source: "/api/analytics/:path*",
+        destination: "http://18.141.212.96:5000/analytics/:path*",
+      },
     ];
   };
   return {

@@ -31,8 +31,7 @@ def instruments_upload_controller():
 @instruments_blueprint.route("/instruments/<int:instrumentId>", methods=["GET", "PUT", "DELETE"])
 def instrument_controller(instrumentId):
     if request.method == "GET":
-        data = retrieve_an_instrument(instrumentId)
-        return make_response(json.dumps(data), 200)
+        return make_response(json.dumps(retrieve_an_instrument(instrumentId)), 200)
     elif request.method == "PUT":
         data_obj = json.loads(request.data)
         return make_response(json.dumps(update_an_instrument(instrumentId, data_obj)), 200)
