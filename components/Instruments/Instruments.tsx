@@ -27,7 +27,14 @@ const Instruments = () => {
     InstrumentsRowData[]
   >([])
   const [instruments, setInstruments] = useState<InstrumentsRowData[]>([])
-  const [formData, setFormData] = useState<InstrumentFormData | null>(null)
+  const [formData, setFormData] = useState<InstrumentFormData>({
+    instrumentName: '',
+    instrumentType: '',
+    country: '',
+    sector: '',
+    instrumentCurrency: '',
+    isTradeable: 'False',
+  })
   const [showForm, setShowForm] = useState<boolean>(false)
 
   const handleInput = (evt: any) => {
