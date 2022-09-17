@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-
+import { useRouter } from 'next/router';
 import Section from '../common/Section/Section'
 import Table from '../common/Table/Table'
 
@@ -29,6 +29,7 @@ import Fade from '@mui/material/Fade';
 import InstrUpload from './InstrumentsUpload'
 
 const Instruments = () => {
+  const router = useRouter();
   const [userSearchInput, setUserSearchInput] = useState<string>('')
   const [searchPlaceholder, setSearchPlaceholder] = useState<string>('Search')
   const [queriedInstruments, setQueriedInstruments] = useState<
@@ -212,6 +213,9 @@ const Instruments = () => {
                 rows={queriedInstruments}
                 width="65vw"
                 buttonName="More Info"
+                // clickHandler={queriedInstruments.map(()=>{
+                //   router.push("/instruments/")
+                // })}
               ></Table>
             </div>
           </Section>

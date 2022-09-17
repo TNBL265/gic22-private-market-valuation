@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useRouter } from 'next/router';
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -141,6 +142,8 @@ export default function CustomizedTables({
   handleSelect,
   buttonName,
 }: TableProps) {
+
+  const router = useRouter();
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
@@ -188,7 +191,12 @@ export default function CustomizedTables({
           ).map((row1, idx) => {
             return (
               <StyledTableRow key={row1.instrumentName} onSelect={handleSelect}>
-                <CustomTableRow row={row1} buttonName={buttonName} />
+                <CustomTableRow row={row1} buttonName={buttonName} clickHandler={()=>{
+                  console.log(row1)
+                  let route  = `/instruments/${row1.instrumentId}`;
+                  console.log(`Route: ${route}`)
+                  router.push(route)
+                }} />
               </StyledTableRow>
             )
           })}
