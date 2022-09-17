@@ -28,10 +28,10 @@ investment decision-making within a given window of opportunity.
 git clone https://github.com/TNBL265/gic22-private-market-valuation.git
 cd gic22-private-market-valuation
 ```
-2. Start backend [flask-server](./flask-server)
+2. Start backend [flask_server](./flask_server)
 - Setup virtual environment
 ```shell
-cd flask-server
+cd flask_server
 python -m venv env
 source env/bin/activate
 pip install -r requirements.txt
