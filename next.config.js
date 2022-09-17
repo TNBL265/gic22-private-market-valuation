@@ -1,6 +1,16 @@
 module.exports = () => {
   const rewrites = () => {
     return [
+      // {
+      //   source: '/:path*',
+      //   // destination: '/:path*',
+      //   headers: [
+      //     {
+      //       key: 'Cache-Control',
+      //       value: 'no-store',
+      //     },
+      //   ],
+      // },
       {
         source: "/api/instruments/:path*",
         destination: "http://18.143.155.239:5000/instruments/:path*",
@@ -17,5 +27,6 @@ module.exports = () => {
   };
   return {
     rewrites,
+    generateEtags: false,
   };
 };

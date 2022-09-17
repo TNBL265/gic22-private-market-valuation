@@ -197,7 +197,7 @@ export default function CustomizedTables({
             : rows
           ).map((row1, idx) => {
             return (
-              <StyledTableRow key={row1.instrumentName} onSelect={handleSelect}>
+              <StyledTableRow key={row1.createdAt+row1.instrumentName} onSelect={handleSelect}>
                 {displayFilteredRow(row1)}
               </StyledTableRow>
             )
@@ -207,7 +207,7 @@ export default function CustomizedTables({
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
+              colSpan={5}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}

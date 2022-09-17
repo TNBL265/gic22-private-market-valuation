@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TransactionData, TransactionRowData } from '../../types/transactions'
-import { getTransactions } from '../common/Apis'
+import { getTransactions, getTransactionsById, getTransactionsForInstrument } from '../common/Apis'
 import Modal from '../common/Modal/Modal'
 import { parseTransactionViewData } from '../common/Parser/Parser'
 import Section from '../common/Section/Section'
@@ -12,7 +12,11 @@ import { sampleData } from './sampleData'
 
 import styles from './Transactions.module.css'
 
-const Transactions = () => {
+interface TransactionsProp {
+  instrumentId?: string
+}
+
+const Transactions = ({ instrumentId }: TransactionsProp) => {
   const [queriedTransactions, setQueriedTransactions] = useState<
     TransactionRowData[]
   >([])
@@ -40,10 +44,14 @@ const Transactions = () => {
   useEffect(() => {
     // fetch Data here
     const fetchData = async () => {
-      let res = (await getTransactions())?.data
+      let res =
+        instrumentId?.length > 0
+          ? (await getTransactionsForInstrument(instrumentId))?.data
+          : (await getTransactions())?.data
       if (res == undefined || res.length == 0) {
         return
       }
+      console.log(instrumentId)
       console.log(res)
       const fetchedData = parseTransactionViewData(res)
       setQueriedTransactions(fetchedData), setTransactions(res)

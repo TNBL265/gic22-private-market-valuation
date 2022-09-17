@@ -104,6 +104,7 @@ class TransactionData(db.Model):
             "quantity": self.quantity,
             "transactionDate": format_datetime(self.transactionDate),
             "transactionType": self.transactionType,
+            "transactionAmount": self.transactionAmount,
             "transactionCurrency": self.transactionCurrency,
             "isCancelled": self.isCancelled,
             "createdAt": format_datetime(self.createdAt),
