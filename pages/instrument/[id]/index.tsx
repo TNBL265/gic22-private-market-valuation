@@ -95,6 +95,7 @@ const InstrumentPage = () => {
     setInstMVs(res);
   }
   useEffect(() => {
+    console.log(router.query)
     const id = router.query.id as string;
     console.log(`id ${id}`);
     fetchInstrumentData(id as unknown as number)
