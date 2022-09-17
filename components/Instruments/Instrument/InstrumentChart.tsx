@@ -344,7 +344,7 @@ const ChartOptions = {
 const InstrumentChart = () => {
   return (
     <div>
-      <div className="p-4 rounded-lg bg-white">
+      <div >
         <Chart
           options={ChartOptions.options as any}
           series={ChartOptions.series}

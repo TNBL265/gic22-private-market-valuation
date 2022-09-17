@@ -15,16 +15,27 @@ module.exports = {
       transparent: 'transparent',
       current: 'currentColor',
       'white': '#ffffff',  // !important
-      'allo': {
-        100: '#88FFEE',  //!important
-        200: '#4AF4DC', // !important
-        300: '#3BDBC4 ', //!important
-        400: '#06BAAD',  // !important
-        500: '#00A89C',  // !important
-        600: '#019C90 ',  //!important
-        700: '#15756D ',  //!important
-        800: '#00665E ', //!important
-        900: '#003935 ',  //!important
+      'my-blue':{
+        1: "#0032A1",
+        2: "#7096EA",
+        3: "#92B2F8",
+      },
+      'my-gray':{
+        1: "#393939",
+        2: "#AAA6A6",
+        3: "#6D6D6D",
+        4: "#F2F2F2",
+        5: "#F6F6F6",
+      },
+      'my-green':{
+        1:"#0DB14F",
+        2:"#53F88B"
+      },
+      'my-red':{
+        1:"#EC0039"
+      },
+      'orange':{
+        1:"#FFC700"
       }
     },
     extend: {
