@@ -1,9 +1,7 @@
 from database import db
-from utils import format_datetime
 import pandas as pd
 import numpy as np
 import json
-import datetime
 import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)

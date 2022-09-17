@@ -6,7 +6,7 @@ from services import *
 analytics_blueprint = Blueprint("analytics_api", __name__)
 
 
-@analytics_blueprint.route("/analytics/investments/<int:investmentId>/total-market-values")
+@analytics_blueprint.route("/analytics/investments/<int:investmentId>/total-market-values", methods=["GET"])
 def view_total_market_values_by_investment(investmentId):
     if request.method == "GET":
         args = request.args
@@ -19,7 +19,7 @@ def view_total_market_values_by_investment(investmentId):
         return make_response(json.dumps("Request type not supported"), 400)
 
 
-@analytics_blueprint.route("/analytics/investments/pnl")
+@analytics_blueprint.route("/analytics/investments/pnl", methods=["GET"])
 def view_all_pnl_breakdown():
     if request.method == "GET":
         args = request.args
@@ -31,7 +31,7 @@ def view_all_pnl_breakdown():
         return make_response(json.dumps("Request type not supported"), 400)
 
 
-@analytics_blueprint.route("/analytics/investments/<int:investmentId>/pnl")
+@analytics_blueprint.route("/analytics/investments/<int:investmentId>/pnl", methods=["GET"])
 def view_single_pnl_breakdwon(investmentId):
     if request.method == "GET":
         args = request.args
