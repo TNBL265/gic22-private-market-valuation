@@ -16,10 +16,11 @@ body {
   background-color: #f4f7fa !important;
 }
 
-/* .page__body {
-  margin-left: clamp(280px, 10vw, 280px);
-  padding: 1rem;
-} */
+.page__body {
+  flex-grow: 1;
+  /* margin-left: clamp(280px, 10vw, 280px);
+  padding: 1rem; */
+}
 
 a {
   color: inherit;

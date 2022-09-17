@@ -47,7 +47,7 @@ const LeftNavbar = () => {
         {availableTabs.map(({ name, Icon }) => {
           return (
             <div
-              className={`${styles.tab} ${
+              className={`${styles.tab} cursor-pointer ${
                 "/" + name.toLowerCase() === currentPage ? styles.active : ""
               }`}
               key={name}

@@ -15,7 +15,7 @@ const InstrumentPage = () => {
         <LeftNavbar />
       {/* </div> */}
       <div className="page__body grow">
-        <div className="bg-black rounded-t-2xl h-[20%]"></div>
+        <div className="bg-zinc-800 rounded-t-2xl h-[20%]"></div>
         <div className="p-2">
         <div className={BlockClassName}>
           <InstrumentChart />
