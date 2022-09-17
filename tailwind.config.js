@@ -39,7 +39,7 @@ module.exports = {
         "my-red": {
           1: "#EC0039",
         },
-        orange: {
+        "my-orange": {
           1: "#FFC700",
         },
       },

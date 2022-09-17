@@ -31,7 +31,7 @@ const Transactions = () => {
                 columns={headings.length}
                 tableHeaders={headings.map((heading) => heading.name)}
                 rows={queriedTransactions}
-                width="65vw"
+                // width="65vw"
                 buttonName="View"
               ></Table>
             </div>
