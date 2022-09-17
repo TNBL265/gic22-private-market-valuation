@@ -1,0 +1,41 @@
+:root {
+  --navBarBg: #071d49;
+  --navBarColor: white;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif;
+  background-color: #f4f7fa !important;
+}
+
+.page__body {
+  margin-left: clamp(280px, 10vw, 280px);
+  padding: 1rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --navBarBg: white;
+    --navBarColor: #071d49;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+} */
