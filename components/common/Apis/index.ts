@@ -92,7 +92,25 @@ const getTransactions = async () => {
     }
 }
 
+const getTransactionsById = async (id: number) => {
+    try {
+        let res = await axios.get(`${BASE_URL}/transactions/${id}`);
+        console.log(res)
+        return res["data"]
+    } catch (e) {
+        return null
+    }
+}
 
+const postTransactions = async (data: any) => {
+    try {
+        let res = await axios.post(`${BASE_URL}/transactions`,data,{headers});
+        console.log(res)
+        return res["data"]
+    } catch (e) {
+        return null
+    }
+}
 
 export {
     getInstruments,
