@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import LeftNavbar from '../../../components/common/LeftNavbar/LeftNavbar'
+import InstrumentChart from '../../../components/Instruments/Instrument/InstrumentChart'
 
 const InstrumentPage = () => {
     const router = useRouter()
@@ -12,7 +13,7 @@ const InstrumentPage = () => {
           <LeftNavbar />
         </div>
         <div className="page__body">
-          
+          <InstrumentChart />
         </div>
       </div>
     )
