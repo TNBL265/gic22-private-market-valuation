@@ -30,7 +30,6 @@ class InstrumentData(instruments_db.Model):
         self.notes = notes
 
     def to_map_as_date_string(self):
-        modifiedAt = self.modifiedAt.strftime("%Y-%m-%d %H:%M:%S") if self.modifiedAt else ""
         return {
             "instrumentId": self.instrumentId,
             "instrumentName": self.instrumentName,
@@ -38,31 +37,73 @@ class InstrumentData(instruments_db.Model):
             "country": self.country,
             "sector": self.sector,
             "instrumentCurrency": self.instrumentCurrency,
-            "isTradable": self.isTradeable,
-            "createdAt": self.createdAt.strftime("%Y-%m-%d %H:%M:%S"),
-            "modifiedAt": modifiedAt,
+            "isTradeable": self.isTradeable,
+            "createdAt": format_datetime(self.createdAt),
+            "modifiedAt": format_datetime(self.modifiedAt),
             "notes": self.notes
         }
 
 
 def create_an_instrument(data_obj):
-    instruments_db.session.expunge_all()
     data = data_obj["data"]
     data = InstrumentData(data["instrumentName"], data["instrumentType"], data["country"], data["sector"],
-                          data["instrumentCurrency"], bool(data["isTradable"]), data.get("notes", None))
+                          data["instrumentCurrency"], bool(data["isTradeable"]), data.get("notes", None))
     instruments_db.session.add(data)
     instruments_db.session.commit()
-    output = {
+    out = {
         "instrumentId": data.instrumentId,
         "createdAt": data.createdAt.strftime("%Y-%m-%d %H:%M:%S")
     }
     instruments_db.session.remove()
     instruments_db.session.close()
-    return output
+    return out
+
+
+def retrieve_an_instrument(instrumentId):
+    instrument = InstrumentData.query.get(instrumentId)
+    data = instrument.to_map_as_date_string() if instrument else "Not Available"
+    return {"data": data}
 
 
 def retrieve_list_of_instruments():
     instrument_list = InstrumentData.query.all()
-    data_list = [instrument_data.to_map_as_date_string() for instrument_data in instrument_list]
-    data_map = {"data": data_list}
-    return data_map
+    instrument_list = [instrument_data.to_map_as_date_string() for instrument_data in instrument_list]
+    return {"data": instrument_list}
+
+
+def update_an_instrument(instrumentId, data_obj):
+    instrument = InstrumentData.query.filter_by(instrumentId=instrumentId).first()
+    data = data_obj["data"]
+    try:
+        instrument.instrumentName = data["instrumentName"]
+        instrument.country = data["country"]
+        instrument.sector = data["sector"]
+        instrument.instrumentType = data["instrumentType"]
+        instrument.instrumentCurrency = data["instrumentCurrency"]
+        instrument.isTradeable = bool(data["isTradeable"])
+        instrument.notes = data.get("notes", None)
+    except KeyError:
+        return "Missing field in request."
+    instruments_db.session.commit()
+    out = {
+        "instrumentId": instrument.instrumentId,
+        "createdAt": format_datetime(instrument.createdAt),
+        "modifiedAt": format_datetime(instrument.modifiedAt)
+    }
+    instruments_db.session.remove()
+    instruments_db.session.close()
+    return out
+
+
+def delete_an_instrument(instrumentId):
+    InstrumentData.query.filter_by(instrumentId=instrumentId).delete()
+    instruments_db.session.commit()
+    instruments_db.session.remove()
+    instruments_db.session.close()
+    return "Deleted"
+
+
+def format_datetime(datetime: datetime):
+    return datetime.strftime("%Y-%m-%d %H:%M:%S") if datetime else ""
+
+
