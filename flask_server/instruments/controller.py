@@ -17,16 +17,15 @@ def instruments_controller():
     else:
         return make_response(json.dumps("Request type not supported"), 400)
 
+
 @instruments_blueprint.route("/instruments/upload", methods=["POST"])
 def instruments_upload_controller():
     if request.method == "POST":
         data_obj = json.loads(request.data)
-        # print(data_obj)
         data = data_obj["data"]
         return make_response(json.dumps(mass_create_instruments(data)), 200)
     else:
         return make_response(json.dumps("Request type not supported"), 400)
-
 
 
 @instruments_blueprint.route("/instruments/<int:instrumentId>", methods=["GET", "PUT", "DELETE"])

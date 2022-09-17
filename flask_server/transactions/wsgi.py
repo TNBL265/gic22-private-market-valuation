@@ -17,4 +17,4 @@ db.init_app(transactions_app)
 if __name__ == "__main__":
     with transactions_app.app_context():
         db.create_all()
-    transactions_app.run(host='0.0.0.0', port=5003, debug=False)
+    transactions_app.run(host='0.0.0.0', port=5000, debug=False)
