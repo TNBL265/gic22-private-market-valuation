@@ -7,8 +7,12 @@ import LeftNavbar from "../components/common/LeftNavbar/LeftNavbar";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect, useState } from "react";
-import { getMyInstrumentValue, getMyPortfolioPnL } from "../components/common/Apis";
+import {
+  getMyInstrumentValue,
+  getMyPortfolioPnL,
+} from "../components/common/Apis";
 import Table from "../components/common/Table/Table";
+import InstrumentChart from "../components/Instruments/Instrument/InstrumentChart";
 
 const ChartOptions = {
   series: [
@@ -57,44 +61,56 @@ const ChartOptions = {
   },
 };
 const headings = [
-  { name: 'Instruments' },
-  { name: 'Type' },
-  { name: 'Country' },
-  { name: 'Sector' },
-  { name: 'Currency' },
-  { name: 'Tradeable?' },
-  { name: ' ' },
-]
-
+  { name: "Instruments" },
+  { name: "Type" },
+  { name: "Country" },
+  { name: "Sector" },
+  { name: "Currency" },
+  { name: "Tradeable?" },
+  { name: " " },
+];
 
 const toDateString = (d: Date) => {
-  console.log("toDateString")
-  console.log(d)
-  return d.toISOString().split('T')[0]
-}
+  console.log("toDateString");
+  console.log(d);
+  return d.toISOString().split("T")[0];
+};
 
+const parseGraphMV = (data: any) => {
+  const res = data?.map((el: any) => {
+    return {
+      x: el["marketValueDate"],
+      y: el["marketValue"],
+    };
+  });
+  return res;
+};
 const PortfolioPage = () => {
-  const [startDate, setStartDate] = useState<string>(toDateString(new Date(2020,1,1)));
+  const [startDate, setStartDate] = useState<string>(
+    toDateString(new Date(2020, 1, 1))
+  );
   const [endDate, setEndDate] = useState<string>(toDateString(new Date()));
-  const [myPnL, setMyPnL] = useState([])
-  const [myInvestments, setMyInvs] = useState([])
+  const [myPnL, setMyPnL] = useState([]);
+  const [myInvestments, setMyInvs] = useState([]);
   const [myValue, setMyValue] = useState(0);
   useEffect(() => {
-    const fetchInvestments = async () => {
-      let res = (await getMarketValuesById(id))?.data;
-      console.log(myInvestments)
-      setMyInvs(res);
-    };
+    // const fetchInvestments = async () => {
+    //   let res = (await getMarketValuesById(id))?.data;
+    //   console.log(myInvestments)
+    //   setMyInvs(res);
+    // };
     const fetchTotalValue = async () => {
       let acc = 0;
-      for(let i = 1; i < 201 ; i++){
+      let acc_arr = [];
+      for (let i = 1; i < 20; i++) {
         let res = (await getMyInstrumentValue(i, startDate, endDate))?.data;
-
-        console.log(res)
         acc += res[res.length - 1]["marketValue"];
+        acc_arr.push(res[res.length - 1]);
       }
-      
+      console.log("acc_arr");
+      console.log(acc_arr);
       setMyValue(acc);
+      setMyInvs(acc_arr);
     };
     const fetchPortfolioPnL = async () => {
       let res = (await getMyPortfolioPnL())?.data;
@@ -102,7 +118,7 @@ const PortfolioPage = () => {
     };
     fetchTotalValue();
     fetchPortfolioPnL();
-  },[])
+  }, []);
   return (
     <div className="page__container flex relative ">
       <div className="page__left">
@@ -153,7 +169,9 @@ const PortfolioPage = () => {
                   label="From"
                   type="date"
                   value={startDate}
-                  onChange={(e)=>{setStartDate(e.target.value)}}
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                  }}
                   // defaultValue="2019-05-24" // to reflect earliest
                   InputLabelProps={{
                     shrink: true,
@@ -164,8 +182,10 @@ const PortfolioPage = () => {
                   id="endDate"
                   label="To"
                   type="date"
-                  value={startDate}
-                  onChange={(e)=>{setStartDate(e.target.value)}}
+                  value={endDate}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                  }}
                   defaultValue="2019-05-24" // to reflect latest
                   InputLabelProps={{
                     shrink: true,
@@ -177,11 +197,15 @@ const PortfolioPage = () => {
           </div>
 
           <div id="chart">
-            <Chart
+            {/* <Chart
               options={ChartOptions.options as any}
-              series={ChartOptions.series}
+              series={parseGraphMV(myInvestments)}
               type="line"
               height={350}
+            /> */}
+            <InstrumentChart
+              title={"Overall Market Values"}
+              data={parseGraphMV(myInvestments)}
             />
           </div>
           {/* <div>
