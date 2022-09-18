@@ -6,5 +6,6 @@ export const headings = [
   { name: 'Quantity' },
   { name: 'Created At' },
   { name: 'Modified At' },
+  { name: 'Cancelled?' },
   { name: ' ' },
 ]

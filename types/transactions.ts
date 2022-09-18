@@ -22,4 +22,5 @@ export interface TransactionRowData {
   quantity: number
   createdAt: string
   modifiedAt: string
+  isCancelled: boolean
 }

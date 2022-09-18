@@ -4,19 +4,30 @@ import LeftNavbar from "../../../components/common/LeftNavbar/LeftNavbar";
 import InstrumentChart from "../../../components/Instruments/Instrument/InstrumentChart";
 import Transactions from "../../../components/Transactions/Transactions";
 
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { Button, Fade, IconButton, Modal } from "@mui/material";
+import {
+  requiredFields,
+  selectFields,
+  optionalFields,
+} from '../../../components/Instruments/constants'
+
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import { Box, Button, Fade, IconButton, MenuItem, Modal } from '@mui/material'
+
 import {
   delInstrument,
+  editInstruments,
   getInstrumentById,
   getMarketValues,
   getMarketValuesById,
+  getMyInstrumentPnLDate,
   postTransactions,
 } from "../../../components/common/Apis";
 import { ChangeEvent, useEffect, useState } from "react";
+import Section from '../../../components/common/Section/Section'
 
 const BlockClassName = "p-4 rounded-2xl bg-white relative z-10";
+
 
 const InstrumentBuySell = ({ id, instMVs }: any) => {
   const [qty, setQty] = useState(0);
@@ -30,6 +41,7 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
       ? instMVs[instMVs.length - 1]["marketValue"]
       : 1;
   console.log(`mv: ${mv}`);
+
   const handleQtyChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -229,12 +241,27 @@ const parseGraphMVData = (data: any) => {
   });
 };
 
+const parseGraphMVDateForPNL = (data: any) => {
+  const res =  data?.map((el: any) => {
+    return {
+      x: el['marketValueDate'],
+      y: el['net_profitloss'],
+    }
+  })
+  console.log(res);
+  return res;
+}
+
 const InstrumentPage = () => {
-  const router = useRouter();
-  const [instDetails, setInstDetails] = useState(null);
-  const [instMVs, setInstMVs] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [instrumentId, setInstrumentId] = useState<string>("");
+
+  const router = useRouter()
+  const [instDetails, setInstDetails] = useState({})
+  const [instMVs, setInstMVs] = useState([])
+  const [editMode, setEditMode] = useState(false)
+  const [instrumentId, setInstrumentId] = useState<string>('')
+  const [startDate, setStartDate] = useState<string>('')
+  const [endDate, setEndDate] = useState<string>('')
+  const [netProfits, setNetProfits] = useState<any>()
 
   const [showDelModal, setShowDelModal] = useState(false);
   const [dataType, setDataType] = useState("MV");
@@ -243,6 +270,142 @@ const InstrumentPage = () => {
   const displayTransactions = () => {
     return <Transactions instrumentId={instrumentId} />;
   };
+
+  const handleInput = (evt: any) => {
+    const name = evt.target.name
+    const newValue = evt.target.value
+    setInstDetails({ ...instDetails, [name]: newValue })
+  }
+
+  const handleEdit = async (evt: any) => {
+    evt.preventDefault()
+
+    let data = { data: instDetails }
+    //check if all the required inputs are entered
+    console.log(data)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+    const res = await editInstruments(data, instrumentId)
+    console.log(res)
+  }
+
+  const displayInstrumentForm = () => {
+    return (
+      <Box
+        component="form"
+        sx={{
+          '& .MuiTextField-root': { mt: 2, mb: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <div style={{ backgroundColor: 'white' }}>
+          {requiredFields.map((requiredField) => {
+            return (
+              <TextField
+                required
+                id="outlined-required"
+                name={requiredField.name}
+                label={requiredField.label}
+                value={instDetails[`${requiredField.name}`]}
+                key={requiredField.label}
+                onChange={handleInput}
+              />
+            )
+          })}
+          {selectFields.map((selectField) => {
+            return (
+              <TextField
+                select
+                id="outlined-required"
+                name={selectField.name}
+                label={selectField.label}
+                value={instDetails?.isTradeable == 'True' ? 'True' : 'False'}
+                key={selectField.label}
+                onChange={handleInput}
+              >
+                <MenuItem key={'True'} value={'True'}>
+                  {'True'}
+                </MenuItem>
+                <MenuItem key={'False'} value={'False'}>
+                  {'False'}
+                </MenuItem>
+              </TextField>
+            )
+          })}
+          {optionalFields.map((optionalField) => {
+            return (
+              <TextField
+                id="outlined-helperText"
+                name={optionalField.name}
+                label={optionalField.label}
+                key={optionalField.label}
+              />
+            )
+          })}
+        </div>
+        <Button
+          variant="contained"
+          color="success"
+          className="text-my-green-1 border-my-green-1 mr-8"
+          onClick={handleEdit}
+        >
+          Update
+        </Button>
+      </Box>
+    )
+  }
+
+  const submitDate = async (evt: any) => {
+    evt.preventDefault()
+    const start = startDate.replaceAll('-', '')
+    const end = endDate.replaceAll('-', '')
+    const res = await getMyInstrumentPnLDate(instrumentId, start, end)
+    setNetProfits(res['data'])
+    console.log(res)
+  }
+
+  const displayAnalytics = () => {
+    return (
+      <Section title="Analytics" size={'L'}>
+        <div>
+          <TextField
+            required
+            id="outlined-required"
+            name={'startDate'}
+            label={'Enter Start Date'}
+            value={startDate}
+            onChange={(e: any) => setStartDate(e.target.value)}
+          />
+          <TextField
+            required
+            id="outlined-required"
+            name={'endDate'}
+            label={'Enter Start Date'}
+            value={endDate}
+            onChange={(e: any) => setEndDate(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            color="success"
+            className="text-my-green-1 border-my-green-1 mr-8"
+            onClick={submitDate}
+          >
+            Submit
+          </Button>
+          <div className={BlockClassName + ' mb-4'}>
+            {netProfits && (
+              <InstrumentChart
+                title={'Net Profit/Loss'}
+                data={parseGraphMVDateForPNL(netProfits)}
+              />
+            )}
+          </div>
+        </div>
+      </Section>
+    )
+  }
 
   useEffect(() => {
     console.log(router.query);
@@ -280,7 +443,8 @@ const InstrumentPage = () => {
               aria-label="Upload instrument data"
               className="text-my-blue-2"
               onClick={() => {
-                setEditMode(true);
+                setEditMode((prev) => !prev)
+
               }}
             >
               <EditIcon className="text-white w-8 h-8 mr-2" />
@@ -297,6 +461,7 @@ const InstrumentPage = () => {
               <DeleteForeverIcon className="text-white w-8 h-8" />
             </IconButton>
           </div>
+          <div>{editMode && displayInstrumentForm()}</div>
           <div className="flex items-center justify-between my-6">
             <div className="p-4 bg-white rounded-2xl flex items-center grow mr-4">
               <div className="">
@@ -335,6 +500,7 @@ const InstrumentPage = () => {
                 />
               </div>
               <div className={BlockClassName}>
+                {displayAnalytics()}
                 {instrumentId?.length > 0 && displayTransactions()}
               </div>
             </div>
