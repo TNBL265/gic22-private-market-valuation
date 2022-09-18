@@ -51,10 +51,9 @@ export const parseTransactionViewData = (
         quantity: transaction.quantity,
         createdAt: transaction.createdAt,
         modifiedAt: transaction.modifiedAt,
+        isCancelled: transaction.isCancelled ? 'True' : 'False',
       }
     },
   )
   return transactionViewData
 }
-
-

@@ -379,9 +379,9 @@ const InstrumentChart = ({ title, data }: any) => {
     },
     yaxis: {
       labels: {
-        formatter: function (val: number) {
-          return (val / 1000000).toFixed(0);
-        },
+        // formatter: function (val: number) {
+        //   return (val / 1000000).toFixed(0);
+        // },
       },
       title: {
         text: 'Price'
@@ -392,11 +392,11 @@ const InstrumentChart = ({ title, data }: any) => {
     },
     tooltip: {
       shared: false,
-      y: {
-        formatter: function (val: number) {
-          return (val / 1000000).toFixed(0)
-        }
-      }
+      // y: {
+      //   formatter: function (val: number) {
+      //     return (val / 1000000).toFixed(0)
+      //   }
+      // }
     }
   }
   let series = [{

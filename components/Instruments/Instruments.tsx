@@ -19,7 +19,7 @@ import { Button, IconButton, MenuItem, TextField } from '@mui/material'
 import { Box } from '@mui/material'
 import axios from 'axios'
 
-import { getInstruments } from '../common/Apis'
+import { getInstruments, postInstruments } from '../common/Apis'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
@@ -73,11 +73,7 @@ const Instruments = () => {
     const headers = {
       'Content-Type': 'application/json',
     }
-    const res = await axios
-      .post(INSTRUMENTS_BASE_URL, data, { headers })
-      .then((res) => {
-        console.log(res)
-      })
+    const res = await postInstruments(data)
   }
 
   const displayInstrumentForm = () => {

@@ -6,6 +6,8 @@ import LeftNavbar from "../components/common/LeftNavbar/LeftNavbar";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { useEffect, useState } from "react";
+import { getMyPortfolioPnL } from "../components/common/Apis";
 
 const ChartOptions = {
   series: [
@@ -55,6 +57,21 @@ const ChartOptions = {
 };
 
 const PortfolioPage = () => {
+  const [dateRange, setDateRange] = useState([new Date(), Date.now()])
+
+  const [myPnL, setMyPnL] = useState([])
+  const [myInvestments, setMyInvs] = useState([])
+  useEffect(() => {
+    const fetchInvestments = async () => {
+      let res = (await getMarketValuesById(id))?.data;
+      setMyInvs(res);
+    };
+    const fetchPortfolioPnL = async () => {
+      let res = (await getMyPortfolioPnL())?.data;
+      setMyPnL(res);
+    };
+    fetchPortfolioPnL();
+  },[])
   return (
     <div className="page__container flex relative ">
       <div className="page__left">
