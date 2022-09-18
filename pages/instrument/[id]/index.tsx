@@ -17,10 +17,11 @@ import { ChangeEvent, useEffect, useState } from 'react'
 
 const BlockClassName = 'p-4 rounded-2xl bg-white relative z-10'
 
-const InstrumentBuySell = ({ latestMV }: any) => {
+const InstrumentBuySell = ({ latestMVs }: any) => {
   const [qty, setQty] = useState(0)
   const [amt, setAmt] = useState(0)
   console.log(latestMV)
+  let latestMV = latestMVs[-1]
   let mv = latestMV ? latestMV['marketValue'] : 0
   console.log(`mv: ${mv}`)
   const handleQtyChange = (
@@ -261,7 +262,7 @@ const InstrumentPage = () => {
                 <InstrumentDetails instDetails={instDetails} />
               </div>
               <div className={BlockClassName}>
-                <InstrumentBuySell latestMV={instMVs ? instMVs[-1] : null} />
+                <InstrumentBuySell latestMV={instMVs} />
               </div>
             </div>
           </div>

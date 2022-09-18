@@ -135,6 +135,38 @@ const postTransactions = async (data: any) => {
   }
 }
 
+
+const getMyInstrumentValue = async (instrumentId: number) => {
+  try {
+    let res = await axios.get(`${BASE_URL}/analytics/investments/${instrumentId}/total-market-values`)
+    console.log(res)
+    return res['data']
+  } catch (e) {
+    return null
+  }
+} 
+
+const getMyInstrumentPnL = async (instrumentId: number) => {
+  try {
+    let res = await axios.get(`${BASE_URL}/analytics/investments/${instrumentId}/pnl`)
+    console.log(res)
+    return res['data']
+  } catch (e) {
+    return null
+  }
+} 
+
+const getMyPortfolioPnL = async () => {
+  try {
+    let res = await axios.get(`${BASE_URL}/analytics/investments/pnl`)
+    console.log(res)
+    return res['data']
+  } catch (e) {
+    return null
+  }
+} 
+
+
 export {
   getInstruments,
   getInstrumentById,
@@ -146,5 +178,8 @@ export {
   postMarketValues,
   getTransactions,
   getTransactionsById,
-  getTransactionsForInstrument
+  getTransactionsForInstrument,
+  getMyInstrumentValue,
+  getMyInstrumentPnL,
+  getMyPortfolioPnL
 }
