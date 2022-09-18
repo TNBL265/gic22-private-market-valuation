@@ -8,11 +8,11 @@ import {
   requiredFields,
   selectFields,
   optionalFields,
-} from "../../../components/Instruments/constants";
+} from '../../../components/Instruments/constants'
 
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { Box, Button, Fade, IconButton, MenuItem, Modal } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import { Box, Button, Fade, IconButton, MenuItem, Modal } from '@mui/material'
 
 import {
   delInstrument,
@@ -245,27 +245,27 @@ const parseGraphMVData = (data: any) => {
 const parseGraphMVDateForPNL = (data: any) => {
   const res = data?.map((el: any) => {
     return {
-      x: el["marketValueDate"],
-      y: el["net_profitloss"],
-    };
-  });
-  console.log(res);
-  return res;
-};
+      x: el['marketValueDate'],
+      y: el['net_profitloss'],
+    }
+  })
+  console.log(res)
+  return res
+}
 
 const InstrumentPage = () => {
-  const router = useRouter();
+  const router = useRouter()
   // const [instDetails, setInstDetails] = useState(null);
   // const [instMVs, setInstMVs] = useState(null);
-  const [myInvestmentValue, setMyInvVal] = useState(0);
-  const [instrPnL, setInstrPnL] = useState(0);
-  const [instDetails, setInstDetails] = useState({});
-  const [instMVs, setInstMVs] = useState([]);
-  const [editMode, setEditMode] = useState(false);
-  const [instrumentId, setInstrumentId] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
-  const [netProfits, setNetProfits] = useState<any>();
+  const [myInvestmentValue, setMyInvVal] = useState(0)
+  const [instrPnL, setInstrPnL] = useState(0)
+  const [instDetails, setInstDetails] = useState({})
+  const [instMVs, setInstMVs] = useState([])
+  const [editMode, setEditMode] = useState(false)
+  const [instrumentId, setInstrumentId] = useState<string>('')
+  const [startDate, setStartDate] = useState<string>('')
+  const [endDate, setEndDate] = useState<string>('')
+  const [netProfits, setNetProfits] = useState<any>()
 
   const [showDelModal, setShowDelModal] = useState(false)
   const [dataType, setDataType] = useState('MV')
@@ -276,35 +276,35 @@ const InstrumentPage = () => {
   }
 
   const handleInput = (evt: any) => {
-    const name = evt.target.name;
-    const newValue = evt.target.value;
-    setInstDetails({ ...instDetails, [name]: newValue });
-  };
+    const name = evt.target.name
+    const newValue = evt.target.value
+    setInstDetails({ ...instDetails, [name]: newValue })
+  }
 
   const handleEdit = async (evt: any) => {
-    evt.preventDefault();
+    evt.preventDefault()
 
-    let data = { data: instDetails };
+    let data = { data: instDetails }
     //check if all the required inputs are entered
-    console.log(data);
+    console.log(data)
     const headers = {
-      "Content-Type": "application/json",
-    };
-    const res = await editInstruments(data, instrumentId);
-    console.log(res);
-  };
+      'Content-Type': 'application/json',
+    }
+    const res = await editInstruments(data, instrumentId)
+    console.log(res)
+  }
 
   const displayInstrumentForm = () => {
     return (
       <Box
         component="form"
         sx={{
-          "& .MuiTextField-root": { mt: 2, mb: 1, width: "25ch" },
+          '& .MuiTextField-root': { mt: 2, mb: 1, width: '25ch' },
         }}
         noValidate
         autoComplete="off"
       >
-        <div style={{ backgroundColor: "white" }}>
+        <div style={{ backgroundColor: 'white' }}>
           {requiredFields.map((requiredField) => {
             return (
               <TextField
@@ -316,7 +316,7 @@ const InstrumentPage = () => {
                 key={requiredField.label}
                 onChange={handleInput}
               />
-            );
+            )
           })}
           {selectFields.map((selectField) => {
             return (
@@ -325,18 +325,18 @@ const InstrumentPage = () => {
                 id="outlined-required"
                 name={selectField.name}
                 label={selectField.label}
-                value={instDetails?.isTradeable == "True" ? "True" : "False"}
+                value={instDetails?.isTradeable == 'True' ? 'True' : 'False'}
                 key={selectField.label}
                 onChange={handleInput}
               >
-                <MenuItem key={"True"} value={"True"}>
-                  {"True"}
+                <MenuItem key={'True'} value={'True'}>
+                  {'True'}
                 </MenuItem>
-                <MenuItem key={"False"} value={"False"}>
-                  {"False"}
+                <MenuItem key={'False'} value={'False'}>
+                  {'False'}
                 </MenuItem>
               </TextField>
-            );
+            )
           })}
           {optionalFields.map((optionalField) => {
             return (
@@ -346,7 +346,7 @@ const InstrumentPage = () => {
                 label={optionalField.label}
                 key={optionalField.label}
               />
-            );
+            )
           })}
         </div>
         <Button
@@ -358,21 +358,21 @@ const InstrumentPage = () => {
           Update
         </Button>
       </Box>
-    );
-  };
+    )
+  }
 
   const submitDate = async (evt: any) => {
-    evt.preventDefault();
-    const start = startDate.replaceAll("-", "");
-    const end = endDate.replaceAll("-", "");
-    const res = await getMyInstrumentPnLDate(instrumentId, start, end);
-    setNetProfits(res["data"]);
-    console.log(res);
-  };
+    evt.preventDefault()
+    const start = startDate.replaceAll('-', '')
+    const end = endDate.replaceAll('-', '')
+    const res = await getMyInstrumentPnLDate(instrumentId, start, end)
+    setNetProfits(res['data'])
+    console.log(res)
+  }
 
   const displayAnalytics = () => {
     return (
-      <div title="Analytics" >
+      <div title="Analytics">
         <div className="text-4xl font-bold">Analytics</div>
         <div className="flex justify-center items-center">
           <div>
@@ -381,7 +381,7 @@ const InstrumentPage = () => {
               type="date"
               required
               id="outlined-required"
-              name={"startDate"}
+              name={'startDate'}
               // label={'Enter Start Date'}
               value={startDate}
               onChange={(e: any) => setStartDate(e.target.value)}
@@ -393,7 +393,7 @@ const InstrumentPage = () => {
               type="date"
               required
               id="outlined-required"
-              name={"endDate"}
+              name={'endDate'}
               // label={'Enter Start Date'}
               value={endDate}
               onChange={(e: any) => setEndDate(e.target.value)}
@@ -408,18 +408,18 @@ const InstrumentPage = () => {
           >
             Submit
           </Button>
-          <div className={BlockClassName + ' mb-4 w-9/10'}>
-            {netProfits && (
-              <InstrumentChart
-                title={"Net Profit/Loss"}
-                data={parseGraphMVDateForPNL(netProfits)}
-              />
-            )}
-          </div>
+        </div>
+        <div className={BlockClassName + ' mb-4 w-9/10'}>
+          {netProfits && (
+            <InstrumentChart
+              title={'Net Profit/Loss'}
+              data={parseGraphMVDateForPNL(netProfits)}
+            />
+          )}
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   useEffect(() => {
     console.log(router.query)
@@ -432,25 +432,25 @@ const InstrumentPage = () => {
       setInstDetails(res)
     }
     const fetchInstrumentMV = async (id: number) => {
-      let res = (await getMarketValuesById(id))?.data;
-      setInstMVs(res);
-    };
+      let res = (await getMarketValuesById(id))?.data
+      setInstMVs(res)
+    }
     const fetchMyInstrumentValue = async (id: number) => {
-      let res = (await getMyInstrumentValue(id))?.data;
-      console.log(res);
-      setMyInvVal(res);
-    };
+      let res = (await getMyInstrumentValue(id))?.data
+      console.log(res)
+      setMyInvVal(res)
+    }
     const fetchMyPnL = async (id: number) => {
-      let res = (await getMyInstrumentPnL(id))?.data;
-      console.log(res);
-      setInstrPnL(res);
-    };
+      let res = (await getMyInstrumentPnL(id))?.data
+      console.log(res)
+      setInstrPnL(res)
+    }
 
-    fetchInstrumentData(id as unknown as number);
-    fetchInstrumentMV(id as unknown as number);
-    fetchMyPnL(id as unknown as number);
-    fetchMyInstrumentValue(id as unknown as number);
-  }, [router.isReady]);
+    fetchInstrumentData((id as unknown) as number)
+    fetchInstrumentMV((id as unknown) as number)
+    fetchMyPnL((id as unknown) as number)
+    fetchMyInstrumentValue((id as unknown) as number)
+  }, [router.isReady])
 
   return (
     <div className="page__container flex relative ">
@@ -469,7 +469,7 @@ const InstrumentPage = () => {
               aria-label="Upload instrument data"
               className="text-my-blue-2"
               onClick={() => {
-                setEditMode((prev) => !prev);
+                setEditMode((prev) => !prev)
               }}
             >
               <EditIcon className="text-white w-8 h-8 mr-2" />
@@ -501,8 +501,8 @@ const InstrumentPage = () => {
 
                 <div className="text-my-green-1">
                   {instDetails
-                    ? `${instDetails["instrumentCurrency"]} ${myInvestmentValue}`
-                    : "-"}
+                    ? `${instDetails['instrumentCurrency']} ${myInvestmentValue}`
+                    : '-'}
                 </div>
               </div>
             </div>
