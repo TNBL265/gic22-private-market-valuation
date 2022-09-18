@@ -147,15 +147,11 @@ const postTransactions = async (data: any) => {
   }
 }
 
-<<<<<<< HEAD
-const getMyInstrumentValue = async (instrumentId: number,start:string,end:string) => {
-=======
 const cancelTransaction = async (id: number) => {
   const res = await axios.delete(`${BASE_URL}/transactions/${id}`)
 }
 
 const getMyInstrumentValue = async (instrumentId: number) => {
->>>>>>> 4d82a970e7969f5e14a426c9cee9b48d66309e9f
   try {
     let res = await axios.get(
       `${BASE_URL}/analytics/investments/${instrumentId}/total-market-values?start=${start}&end=${end}`,
