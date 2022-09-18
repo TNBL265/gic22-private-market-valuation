@@ -54,6 +54,8 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
     if (isBuy) {
       curAmt = -amt;
     }
+    const transDate = new Date().toISOString().split('T')[0]
+    console.log(`Formatted Date: ${transDate}`)
     setTransStats("pending");
     let res = await postTransactions({
       data: {
@@ -61,7 +63,7 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
         quantity: qty,
         transactionAmount: curAmt,
         transactionType: "BUY",
-        transactionDate: Date.now(),
+        transactionDate: transDate,
       },
     });
     console.log(res);
@@ -341,7 +343,7 @@ const InstrumentPage = () => {
                 <InstrumentDetails instDetails={instDetails} />
               </div>
               <div className={BlockClassName}>
-                <InstrumentBuySell instMVs={instMVs} />
+                <InstrumentBuySell id={instrumentId} instMVs={instMVs} />
               </div>
             </div>
           </div>
