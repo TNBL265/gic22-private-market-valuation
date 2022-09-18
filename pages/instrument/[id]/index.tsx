@@ -30,6 +30,12 @@ import Section from '../../../components/common/Section/Section'
 
 const BlockClassName = 'p-4 rounded-2xl bg-white relative z-10'
 
+const toDateString = (d: Date) => {
+  console.log("toDateString")
+  console.log(d)
+  return d.toISOString().split('T')[0]
+}
+
 const InstrumentBuySell = ({ id, instMVs }: any) => {
   const [qty, setQty] = useState(0)
   const [amt, setAmt] = useState(0)
@@ -67,7 +73,7 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
     if (isBuy) {
       curAmt = -amt
     }
-    const transDate = new Date().toISOString().split('T')[0]
+    const transDate = toDateString(new Date())
     console.log(`Formatted Date: ${transDate}`)
     setTransStats('pending')
     let res = await postTransactions({
@@ -258,13 +264,13 @@ const InstrumentPage = () => {
   // const [instDetails, setInstDetails] = useState(null);
   // const [instMVs, setInstMVs] = useState(null);
   const [myInvestmentValue, setMyInvVal] = useState(0);
-  const [instrPnL, setInstrPnL] = useState(0);
+  // const [instrPnL, setInstrPnL] = useState(0);
   const [instDetails, setInstDetails] = useState({});
   const [instMVs, setInstMVs] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [instrumentId, setInstrumentId] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>(toDateString(new Date(2020,1)));
+  const [endDate, setEndDate] = useState<string>(toDateString(new Date()));
   const [netProfits, setNetProfits] = useState<any>();
 
   const [showDelModal, setShowDelModal] = useState(false)
@@ -363,9 +369,12 @@ const InstrumentPage = () => {
 
   const submitDate = async (evt: any) => {
     evt.preventDefault();
+    console.log("submitDate")
+    console.log(startDate)
     const start = startDate.replaceAll("-", "");
     const end = endDate.replaceAll("-", "");
     const res = await getMyInstrumentPnLDate(instrumentId, start, end);
+    console.log("netProfits")
     setNetProfits(res["data"]);
     console.log(res);
   };
@@ -436,19 +445,21 @@ const InstrumentPage = () => {
       setInstMVs(res);
     };
     const fetchMyInstrumentValue = async (id: number) => {
-      let res = (await getMyInstrumentValue(id))?.data;
+      const start = startDate.replaceAll("-", "");
+      const end = endDate.replaceAll("-", "");
+      let res = (await getMyInstrumentValue(id, start, end))?.data;
       console.log(res);
       setMyInvVal(res);
     };
-    const fetchMyPnL = async (id: number) => {
-      let res = (await getMyInstrumentPnL(id))?.data;
-      console.log(res);
-      setInstrPnL(res);
-    };
+    // const fetchMyPnL = async (id: number) => {
+    //   let res = (await getMyInstrumentPnL(id))?.data;
+    //   console.log(res);
+    //   setInstrPnL(res);
+    // };
 
     fetchInstrumentData(id as unknown as number);
     fetchInstrumentMV(id as unknown as number);
-    fetchMyPnL(id as unknown as number);
+    // fetchMyPnL(id as unknown as number);
     fetchMyInstrumentValue(id as unknown as number);
   }, [router.isReady]);
 
@@ -491,7 +502,7 @@ const InstrumentPage = () => {
             <div className="p-4 bg-white rounded-2xl flex items-center grow mr-4">
               <div className="">
                 <h4 className="text-2xl">PnL</h4>
-                <div className="text-my-green-1">{`${instrPnL}%`}</div>
+                <div className="text-my-green-1">{`${netProfits?netProfits[netProfits.length-1]:0}%`}</div>
               </div>
             </div>
 

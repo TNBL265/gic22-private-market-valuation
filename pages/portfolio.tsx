@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect, useState } from "react";
 import { getMyPortfolioPnL } from "../components/common/Apis";
+import Table from "../components/common/Table/Table";
 
 const ChartOptions = {
   series: [
@@ -55,16 +56,30 @@ const ChartOptions = {
     },
   },
 };
-
+const headings = [
+  { name: 'Instruments' },
+  { name: 'Type' },
+  { name: 'Country' },
+  { name: 'Sector' },
+  { name: 'Currency' },
+  { name: 'Tradeable?' },
+  { name: ' ' },
+]
 const PortfolioPage = () => {
   const [dateRange, setDateRange] = useState([new Date(), Date.now()])
 
   const [myPnL, setMyPnL] = useState([])
   const [myInvestments, setMyInvs] = useState([])
+  const [myValue, setMyValue] = useState();
   useEffect(() => {
     const fetchInvestments = async () => {
       let res = (await getMarketValuesById(id))?.data;
+      console.log(myInvestments)
       setMyInvs(res);
+    };
+    const fetchTotalValue = async () => {
+      let res = (await getMarketValuesById(id))?.data;
+      setMyValue(res);
     };
     const fetchPortfolioPnL = async () => {
       let res = (await getMyPortfolioPnL())?.data;
@@ -149,15 +164,15 @@ const PortfolioPage = () => {
               height={350}
             />
           </div>
-          <div>
+          {/* <div>
             <Table
               columns={headings.length}
               tableHeaders={headings.map((heading) => heading.name)}
-              rows={queriedTransactions}
+              rows={myInvestments}
               // width="65vw"
               buttonName="View"
             ></Table>
-          </div>
+          </div> */}
         </div>
         {/* <div className="absolute top-0 left-0 w-full bg-zinc-800 rounded-tl-2xl h-[20%] z-0"></div> */}
       </div>
