@@ -408,14 +408,6 @@ const InstrumentPage = () => {
           >
             Submit
           </Button>
-          <div className={BlockClassName + ' mb-4'}>
-            {netProfits && (
-              <InstrumentChart
-                title={'Net Profit/Loss'}
-                data={parseGraphMVDateForPNL(netProfits)}
-              />
-            )}
-          </div>
         </div>
         <div className={BlockClassName + ' mb-4 w-9/10'}>
           {netProfits && (
