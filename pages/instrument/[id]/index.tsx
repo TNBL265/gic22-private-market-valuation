@@ -366,7 +366,7 @@ const InstrumentPage = () => {
 
   const displayAnalytics = () => {
     return (
-      <Section title="Analytics" size={'L'}>
+      <Section title="Analytics" width="60vw" size={'L'}>
         <div>
           <TextField
             required
@@ -392,7 +392,7 @@ const InstrumentPage = () => {
           >
             Submit
           </Button>
-          <div className={BlockClassName + ' mb-4 w-9/10'}>
+          <div className={BlockClassName + ' mb-4'}>
             {netProfits && (
               <InstrumentChart
                 title={'Net Profit/Loss'}

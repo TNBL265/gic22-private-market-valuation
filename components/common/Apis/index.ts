@@ -147,6 +147,10 @@ const postTransactions = async (data: any) => {
   }
 }
 
+const cancelTransaction = async (id: number) => {
+  const res = await axios.delete(`${BASE_URL}/transactions/${id}`)
+}
+
 const getMyInstrumentValue = async (instrumentId: number) => {
   try {
     let res = await axios.get(
@@ -207,6 +211,7 @@ export {
   getMarketValuesById,
   postMarketValues,
   getTransactions,
+  cancelTransaction,
   getTransactionsById,
   getTransactionsForInstrument,
   postTransactions,
