@@ -271,7 +271,7 @@ const InstrumentPage = () => {
   const [instrumentId, setInstrumentId] = useState<string>("");
   const [startDate, setStartDate] = useState<string>(toDateString(new Date(2020,1)));
   const [endDate, setEndDate] = useState<string>(toDateString(new Date()));
-  const [netProfits, setNetProfits] = useState<any>();
+  const [netProfits, setNetProfits] = useState<any>(null);
 
   const [showDelModal, setShowDelModal] = useState(false)
   const [dataType, setDataType] = useState('MV')
