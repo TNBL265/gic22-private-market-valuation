@@ -78,6 +78,9 @@ const PortfolioPage = () => {
       setMyInvs(res);
     };
     const fetchTotalValue = async () => {
+      for(let i = 0; i < 300 ; i++){
+        getMyInstrumentValue
+      }
       let res = (await getMarketValuesById(id))?.data;
       setMyValue(res);
     };
