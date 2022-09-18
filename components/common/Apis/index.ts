@@ -50,6 +50,18 @@ const postInstruments = async (data: any) => {
   }
 }
 
+const editInstruments = async (data: any, id: number) => {
+  try {
+    let res = await axios.put(`${BASE_URL}/instruments/${id}`, data, {
+      headers,
+    })
+    console.log(res)
+    return res
+  } catch (e) {
+    return null
+  }
+}
+
 const uploadInstruments = async (data: any) => {
   try {
     let res = await axios.post(`${BASE_URL}/instruments/upload`, data, {
@@ -135,18 +147,19 @@ const postTransactions = async (data: any) => {
   }
 }
 
-
-const getMyInstrumentValue = async (instrumentId: number, start: string, end: string) => {
+const getMyInstrumentValue = async (instrumentId: number) => {
   try {
-    let res = await axios.get(`${BASE_URL}/analytics/investments/${instrumentId}/total-market-values?start=${start}/end=${end}`)
+    let res = await axios.get(
+      `${BASE_URL}/analytics/investments/${instrumentId}/total-market-values`,
+    )
     console.log(res)
     return res['data']
   } catch (e) {
     return null
   }
-} 
+}
 
-const getMyInstrumentPnL = async (instrumentId: number) => {
+const getMyInstrumentPnL = async (instrumentId: string) => {
   try {
     console.log("getMyInstrumentPnL")
     let res = await axios.get(`${BASE_URL}/analytics/investments/${instrumentId}/pnl`)
@@ -156,7 +169,22 @@ const getMyInstrumentPnL = async (instrumentId: number) => {
   } catch (e) {
     return null
   }
-} 
+}
+const getMyInstrumentPnLDate = async (
+  instrumentId: string,
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    let res = await axios.get(
+      `${BASE_URL}/analytics/investments/${instrumentId}/pnl?start=${startDate}&end=${endDate}`,
+    )
+    console.log(res)
+    return res['data']
+  } catch (e) {
+    return null
+  }
+}
 
 const getMyPortfolioPnL = async () => {
   try {
@@ -166,13 +194,13 @@ const getMyPortfolioPnL = async () => {
   } catch (e) {
     return null
   }
-} 
-
+}
 
 export {
   getInstruments,
   getInstrumentById,
   postInstruments,
+  editInstruments,
   delInstrument,
   uploadInstruments,
   getMarketValues,
@@ -184,5 +212,6 @@ export {
   postTransactions,
   getMyInstrumentValue,
   getMyInstrumentPnL,
-  getMyPortfolioPnL
+  getMyInstrumentPnLDate,
+  getMyPortfolioPnL,
 }
