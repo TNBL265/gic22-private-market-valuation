@@ -12,6 +12,8 @@ import {
   getInstrumentById,
   getMarketValues,
   getMarketValuesById,
+  getMyInstrumentPnL,
+  getMyInstrumentValue,
   postTransactions,
 } from "../../../components/common/Apis";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -233,8 +235,11 @@ const InstrumentPage = () => {
   const router = useRouter();
   const [instDetails, setInstDetails] = useState(null);
   const [instMVs, setInstMVs] = useState(null);
+  const [myInvestmentValue, setMyInvVal] = useState(0)
   const [editMode, setEditMode] = useState(false);
   const [instrumentId, setInstrumentId] = useState<string>("");
+  const [instrPnL, setInstrPnL] = useState(0)
+  // const [dateRange, setDateRange] = useState([new Date(), Date.now()])
 
   const [showDelModal, setShowDelModal] = useState(false);
   const [dataType, setDataType] = useState("MV");
@@ -258,9 +263,21 @@ const InstrumentPage = () => {
       let res = (await getMarketValuesById(id))?.data;
       setInstMVs(res);
     };
+    const fetchMyInstrumentValue = async(id: number) => {
+      let res = (await getMyInstrumentValue(id))?.data;
+      console.log(res)
+      setMyInvVal(res);
+    }
+    const fetchMyPnL = async(id: number) => {
+      let res = (await getMyInstrumentPnL(id))?.data;
+      console.log(res)
+      setInstrPnL(res);
+    }
 
     fetchInstrumentData(id as unknown as number);
     fetchInstrumentMV(id as unknown as number);
+    fetchMyPnL(id as unknown as number);
+    fetchMyInstrumentValue(id as unknown as number);
   }, [router.isReady]);
 
   return (
@@ -301,14 +318,15 @@ const InstrumentPage = () => {
             <div className="p-4 bg-white rounded-2xl flex items-center grow mr-4">
               <div className="">
                 <h4 className="text-2xl">PnL</h4>
-                <div className="text-my-green-1">+24%</div>
+                <div className="text-my-green-1">{`${instrPnL}%`}</div>
               </div>
             </div>
 
             <div className="p-4 bg-white rounded-2xl flex items-center grow mx-4">
               <div className="">
                 <h4 className="text-2xl">Portfolio Value</h4>
-                <div className="text-my-green-1">$35600</div>
+                
+                <div className="text-my-green-1">{instDetails ? `${instDetails["instrumentCurrency"]} ${myInvestmentValue}` : "-"}</div>
               </div>
             </div>
 
