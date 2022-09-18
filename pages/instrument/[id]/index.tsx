@@ -4,11 +4,18 @@ import LeftNavbar from '../../../components/common/LeftNavbar/LeftNavbar'
 import InstrumentChart from '../../../components/Instruments/Instrument/InstrumentChart'
 import Transactions from '../../../components/Transactions/Transactions'
 
+import {
+  requiredFields,
+  selectFields,
+  optionalFields,
+} from '../../../components/Instruments/constants'
+
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import { Button, Fade, IconButton, Modal } from '@mui/material'
+import { Box, Button, Fade, IconButton, MenuItem, Modal } from '@mui/material'
 import {
   delInstrument,
+  editInstruments,
   getInstrumentById,
   getMarketValues,
   getMarketValuesById,
@@ -151,7 +158,7 @@ const parseGraphMVData = (data: any) => {
 
 const InstrumentPage = () => {
   const router = useRouter()
-  const [instDetails, setInstDetails] = useState(null)
+  const [instDetails, setInstDetails] = useState({})
   const [instMVs, setInstMVs] = useState([])
   const [editMode, setEditMode] = useState(false)
   const [instrumentId, setInstrumentId] = useState<string>('')
@@ -162,6 +169,92 @@ const InstrumentPage = () => {
 
   const displayTransactions = () => {
     return <Transactions instrumentId={instrumentId} />
+  }
+
+  const handleInput = (evt: any) => {
+    const name = evt.target.name
+    const newValue = evt.target.value
+    setInstDetails({ ...instDetails, [name]: newValue })
+  }
+
+  const handleEdit = async (evt: any) => {
+    evt.preventDefault()
+
+    let data = { data: instDetails }
+    //check if all the required inputs are entered
+    console.log(data)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+    const res = await editInstruments(data, instrumentId)
+    console.log(res)
+  }
+
+  const displayInstrumentForm = () => {
+    return (
+      <Box
+        component="form"
+        sx={{
+          '& .MuiTextField-root': { mt: 2, mb: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <div style={{ backgroundColor: 'white' }}>
+          {requiredFields.map((requiredField) => {
+            return (
+              <TextField
+                required
+                id="outlined-required"
+                name={requiredField.name}
+                label={requiredField.label}
+                value={instDetails[`${requiredField.name}`]}
+                key={requiredField.label}
+                onChange={handleInput}
+              />
+            )
+          })}
+          {selectFields.map((selectField) => {
+            return (
+              <TextField
+                select
+                id="outlined-required"
+                name={selectField.name}
+                label={selectField.label}
+                value={instDetails?.isTradeable == 'True' ? 'True' : 'False'}
+                key={selectField.label}
+                onChange={handleInput}
+              >
+                <MenuItem key={'True'} value={'True'}>
+                  {'True'}
+                </MenuItem>
+                <MenuItem key={'False'} value={'False'}>
+                  {'False'}
+                </MenuItem>
+              </TextField>
+            )
+          })}
+          {optionalFields.map((optionalField) => {
+            return (
+              <TextField
+                id="outlined-helperText"
+                name={optionalField.name}
+                label={optionalField.label}
+                key={optionalField.label}
+              />
+            )
+          })}
+        </div>
+        <Button
+          variant="contained"
+          color="success"
+          className="text-my-green-1 border-my-green-1 mr-8"
+          onClick={handleEdit}
+        >
+          Update
+        </Button>
+      </Box>
+    )
   }
 
   useEffect(() => {
@@ -200,7 +293,7 @@ const InstrumentPage = () => {
               aria-label="Upload instrument data"
               className="text-my-blue-2"
               onClick={() => {
-                setEditMode(true)
+                setEditMode((prev) => !prev)
               }}
             >
               <EditIcon className="text-white w-8 h-8 mr-2" />
@@ -217,6 +310,7 @@ const InstrumentPage = () => {
               <DeleteForeverIcon className="text-white w-8 h-8" />
             </IconButton>
           </div>
+          <div>{editMode && displayInstrumentForm()}</div>
           <div className="flex items-center justify-between my-6">
             <div className="p-4 bg-white rounded-2xl flex items-center grow mr-4">
               <div className="">
