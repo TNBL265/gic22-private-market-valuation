@@ -17,6 +17,7 @@ class InstrumentData(db.Model):
     sector = db.Column(db.String, nullable=False)
     instrumentCurrency = db.Column(db.String, nullable=False)
     isTradeable = db.Column(db.Boolean, nullable=False)
+    isDeleted = db.Column(db.Boolean, default=False)
     createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
     modifiedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     notes = db.Column(db.String, nullable=True)
@@ -41,6 +42,7 @@ class InstrumentData(db.Model):
             "sector": self.sector,
             "instrumentCurrency": self.instrumentCurrency,
             "isTradeable": self.isTradeable,
+            "isDeleted": self.isDeleted,
             "createdAt": format_datetime(self.createdAt),
             "modifiedAt": format_datetime(self.modifiedAt),
             "notes": self.notes

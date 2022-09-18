@@ -141,7 +141,7 @@ const postTransactions = async (data: any) => {
   try {
     let res = await axios.post(`${BASE_URL}/transactions`, data, { headers })
     console.log(res)
-    return res['data']
+    return res
   } catch (e) {
     return null
   }
@@ -209,6 +209,7 @@ export {
   getTransactions,
   getTransactionsById,
   getTransactionsForInstrument,
+  postTransactions,
   getMyInstrumentValue,
   getMyInstrumentPnL,
   getMyInstrumentPnLDate,
