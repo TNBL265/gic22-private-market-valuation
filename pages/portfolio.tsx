@@ -7,7 +7,7 @@ import LeftNavbar from "../components/common/LeftNavbar/LeftNavbar";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect, useState } from "react";
-import { getMyPortfolioPnL } from "../components/common/Apis";
+import { getMyInstrumentValue, getMyPortfolioPnL } from "../components/common/Apis";
 import Table from "../components/common/Table/Table";
 
 const ChartOptions = {
@@ -65,12 +65,20 @@ const headings = [
   { name: 'Tradeable?' },
   { name: ' ' },
 ]
-const PortfolioPage = () => {
-  const [dateRange, setDateRange] = useState([new Date(), Date.now()])
 
+
+const toDateString = (d: Date) => {
+  console.log("toDateString")
+  console.log(d)
+  return d.toISOString().split('T')[0]
+}
+
+const PortfolioPage = () => {
+  const [startDate, setStartDate] = useState<string>(toDateString(new Date(2020,1,1)));
+  const [endDate, setEndDate] = useState<string>(toDateString(new Date()));
   const [myPnL, setMyPnL] = useState([])
   const [myInvestments, setMyInvs] = useState([])
-  const [myValue, setMyValue] = useState();
+  const [myValue, setMyValue] = useState(0);
   useEffect(() => {
     const fetchInvestments = async () => {
       let res = (await getMarketValuesById(id))?.data;
@@ -79,17 +87,20 @@ const PortfolioPage = () => {
     };
     const fetchTotalValue = async () => {
       let acc = 0;
-      for(let i = 0; i < 300 ; i++){
-        let res = (await getMarketValuesById(id))?.data;
-        acc += res;
+      for(let i = 1; i < 201 ; i++){
+        let res = (await getMyInstrumentValue(i, startDate, endDate))?.data;
+
+        console.log(res)
+        acc += res[res.length - 1]["marketValue"];
       }
       
-      setMyValue(res);
+      setMyValue(acc);
     };
     const fetchPortfolioPnL = async () => {
       let res = (await getMyPortfolioPnL())?.data;
       setMyPnL(res);
     };
+    fetchTotalValue();
     fetchPortfolioPnL();
   },[])
   return (
@@ -119,7 +130,7 @@ const PortfolioPage = () => {
                   {" "}
                   Total Value
                 </div>
-                <div className="text-2xl text-my-green-1">+ $16,000</div>
+                <div className="text-2xl text-my-green-1">${myValue}</div>
               </div>
               <div className="border-2 border-my-gray-2 h-12 mx-6"></div>
               <div className="text-center">
@@ -141,7 +152,9 @@ const PortfolioPage = () => {
                   id="startDate"
                   label="From"
                   type="date"
-                  defaultValue="2019-05-24" // to reflect earliest
+                  value={startDate}
+                  onChange={(e)=>{setStartDate(e.target.value)}}
+                  // defaultValue="2019-05-24" // to reflect earliest
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -151,6 +164,8 @@ const PortfolioPage = () => {
                   id="endDate"
                   label="To"
                   type="date"
+                  value={startDate}
+                  onChange={(e)=>{setStartDate(e.target.value)}}
                   defaultValue="2019-05-24" // to reflect latest
                   InputLabelProps={{
                     shrink: true,
