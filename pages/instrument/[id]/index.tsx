@@ -1,8 +1,8 @@
-import { useRouter } from "next/router";
-import TextField from "@mui/material/TextField";
-import LeftNavbar from "../../../components/common/LeftNavbar/LeftNavbar";
-import InstrumentChart from "../../../components/Instruments/Instrument/InstrumentChart";
-import Transactions from "../../../components/Transactions/Transactions";
+import { useRouter } from 'next/router'
+import TextField from '@mui/material/TextField'
+import LeftNavbar from '../../../components/common/LeftNavbar/LeftNavbar'
+import InstrumentChart from '../../../components/Instruments/Instrument/InstrumentChart'
+import Transactions from '../../../components/Transactions/Transactions'
 
 import {
   requiredFields,
@@ -22,93 +22,92 @@ import {
   getMarketValuesById,
   getMyInstrumentPnLDate,
   postTransactions,
-} from "../../../components/common/Apis";
-import { ChangeEvent, useEffect, useState } from "react";
+} from '../../../components/common/Apis'
+import { ChangeEvent, useEffect, useState } from 'react'
 import Section from '../../../components/common/Section/Section'
 
-const BlockClassName = "p-4 rounded-2xl bg-white relative z-10";
-
+const BlockClassName = 'p-4 rounded-2xl bg-white relative z-10'
 
 const InstrumentBuySell = ({ id, instMVs }: any) => {
-  const [qty, setQty] = useState(0);
-  const [amt, setAmt] = useState(0);
-  const [transStats, setTransStats] = useState("none"); // either none, pending, failed or success
+  const [qty, setQty] = useState(0)
+  const [amt, setAmt] = useState(0)
+  const [transStats, setTransStats] = useState('none') // either none, pending, failed or success
   // let latestMV = latestMVs?latestMVs[-1]:1;
-  console.log("latestMVs");
-  console.log(instMVs);
+  console.log('latestMVs')
+  console.log(instMVs)
   let mv =
     instMVs && instMVs.length > 0
-      ? instMVs[instMVs.length - 1]["marketValue"]
-      : 1;
-  console.log(`mv: ${mv}`);
+      ? instMVs[instMVs.length - 1]['marketValue']
+      : 1
+  console.log(`mv: ${mv}`)
 
   const handleQtyChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    let val = e.target.value as unknown as number;
-    console.log(`handleQtyChange: ${val}`);
-    setQty(val);
-    setAmt(val * mv);
-    console.log(`New amt ${amt}`);
-  };
+    let val = (e.target.value as unknown) as number
+    console.log(`handleQtyChange: ${val}`)
+    setQty(val)
+    setAmt(val * mv)
+    console.log(`New amt ${amt}`)
+  }
 
   const handleAmtChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    e.preventDefault();
-    let val = e.target.value as unknown as number;
-    setAmt(val);
-    setQty(Math.floor(val / mv));
-  };
+    e.preventDefault()
+    let val = (e.target.value as unknown) as number
+    setAmt(val)
+    setQty(Math.floor(val / mv))
+  }
 
   const handleTransaction = async (isBuy: boolean) => {
-    let curAmt = amt;
+    let curAmt = amt
     if (isBuy) {
-      curAmt = -amt;
+      curAmt = -amt
     }
     const transDate = new Date().toISOString().split('T')[0]
     console.log(`Formatted Date: ${transDate}`)
-    setTransStats("pending");
+    setTransStats('pending')
     let res = await postTransactions({
       data: {
         instrumentId: id,
         quantity: qty,
         transactionAmount: curAmt,
-        transactionType: "BUY",
+        transactionType: 'BUY',
         transactionDate: transDate,
       },
-    });
-    console.log(res);
+    })
+    console.log(res)
 
-    let status = res?.status;
+    let status = res?.status
     if (status == 200) {
-      setTransStats("success");
+      setTransStats('success')
     } else {
-      setTransStats("failed");
+      setTransStats('failed')
     }
-  };
+  }
 
   const handleBuyClick = async (e: any) => {
-    e.preventDefault();
-    handleTransaction(true);
-  };
+    e.preventDefault()
+    handleTransaction(true)
+  }
 
   const handleSellClick = async (e: any) => {
-    e.preventDefault();
-    handleTransaction(false);
-  };
+    e.preventDefault()
+    handleTransaction(false)
+  }
   const StatusMsg = () => {
-    if (transStats == "success") {
-      return <div className="text-my-green-1">Transaction went through!</div>;
-    } else if (transStats == "failed") {
+    if (transStats == 'success') {
+      return <div className="text-my-green-1">Transaction went through!</div>
+    } else if (transStats == 'failed') {
       return (
         <div className="text-my-red-1">Transaction DIDN'T went through!</div>
-      );
-    } else if (transStats == "pending") {
-      return <div className="text-my-gray-2">Attempting transaction</div>;
+      )
+    } else if (transStats == 'pending') {
+      return <div className="text-my-gray-2">Attempting transaction</div>
     }
-    return <div></div>;
-  };
+    return <div></div>
+  }
   return (
     <>
       <h2 className="text-xl my-2">Buy/Sell</h2>
@@ -142,7 +141,7 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
       </div>
       <StatusMsg />
       <div className="flex justify-around">
-        {transStats == "pending" ? (
+        {transStats == 'pending' ? (
           <Button
             variant="outlined"
             color="success"
@@ -162,7 +161,7 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
             BUY
           </Button>
         )}
-        {transStats == "pending" ? (
+        {transStats == 'pending' ? (
           <Button
             variant="outlined"
             color="info"
@@ -185,75 +184,74 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
       </div>
       {/* </div> */}
     </>
-  );
-};
+  )
+}
 
 const InstrumentDetails = ({ instDetails }: any) => {
-  console.log(instDetails);
+  console.log(instDetails)
   const Entry = ({ label, value }: any) => {
     return (
       <div className="flex justify-between text-sm font-semibold my-2">
         <div className="text-my-gray-2">{label}</div>
         <div>{value}</div>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <>
       <h2 className="text-2xl mb-2">Details</h2>
       {instDetails && (
         <>
-          <Entry label="Country" value={instDetails["country"]} />
-          <Entry label="Currency" value={instDetails["instrumentCurrency"]} />
-          <Entry label="Sector" value={instDetails["sector"]} />
-          <Entry label="Type" value={instDetails["instrumentType"]} />
+          <Entry label="Country" value={instDetails['country']} />
+          <Entry label="Currency" value={instDetails['instrumentCurrency']} />
+          <Entry label="Sector" value={instDetails['sector']} />
+          <Entry label="Type" value={instDetails['instrumentType']} />
           <Entry
             label="Tradeable"
-            value={instDetails["isTradeable"] ? "True" : "False"}
+            value={instDetails['isTradeable'] ? 'True' : 'False'}
           />
-          <Entry label="Created At" value={instDetails["createdAt"]} />
-          <Entry label="Modified At" value={instDetails["modifiedAt"]} />
+          <Entry label="Created At" value={instDetails['createdAt']} />
+          <Entry label="Modified At" value={instDetails['modifiedAt']} />
           <div className="text-my-gray-2 text-sm font-semibold my-2">Notes</div>
-          <p>{instDetails["notes"]} </p>
+          <p>{instDetails['notes']} </p>
         </>
       )}
     </>
-  );
-};
+  )
+}
 
 const getGraphTitle = (s: string) => {
   switch (s) {
-    case "MV":
-      return "Market Value";
+    case 'MV':
+      return 'Market Value'
 
-    case "PnL":
-      return "Profit and Loss";
+    case 'PnL':
+      return 'Profit and Loss'
   }
-};
+}
 
 const parseGraphMVData = (data: any) => {
   return data?.map((el: any) => {
     return {
-      x: el["marketValueDate"],
-      y: el["marketValue"],
-    };
-  });
-};
+      x: el['marketValueDate'],
+      y: el['marketValue'],
+    }
+  })
+}
 
 const parseGraphMVDateForPNL = (data: any) => {
-  const res =  data?.map((el: any) => {
+  const res = data?.map((el: any) => {
     return {
       x: el['marketValueDate'],
       y: el['net_profitloss'],
     }
   })
-  console.log(res);
-  return res;
+  console.log(res)
+  return res
 }
 
 const InstrumentPage = () => {
-
   const router = useRouter()
   const [instDetails, setInstDetails] = useState({})
   const [instMVs, setInstMVs] = useState([])
@@ -263,13 +261,13 @@ const InstrumentPage = () => {
   const [endDate, setEndDate] = useState<string>('')
   const [netProfits, setNetProfits] = useState<any>()
 
-  const [showDelModal, setShowDelModal] = useState(false);
-  const [dataType, setDataType] = useState("MV");
+  const [showDelModal, setShowDelModal] = useState(false)
+  const [dataType, setDataType] = useState('MV')
   // const { id } = router.query
 
   const displayTransactions = () => {
-    return <Transactions instrumentId={instrumentId} />;
-  };
+    return <Transactions instrumentId={instrumentId} />
+  }
 
   const handleInput = (evt: any) => {
     const name = evt.target.name
@@ -394,7 +392,7 @@ const InstrumentPage = () => {
           >
             Submit
           </Button>
-          <div className={BlockClassName + ' mb-4'}>
+          <div className={BlockClassName + ' mb-4 w-9/10'}>
             {netProfits && (
               <InstrumentChart
                 title={'Net Profit/Loss'}
@@ -408,23 +406,23 @@ const InstrumentPage = () => {
   }
 
   useEffect(() => {
-    console.log(router.query);
-    const id = router.query.id as string;
-    setInstrumentId(id);
-    console.log(`id ${id}`);
+    console.log(router.query)
+    const id = router.query.id as string
+    setInstrumentId(id)
+    console.log(`id ${id}`)
     const fetchInstrumentData = async (id: number) => {
-      let res = (await getInstrumentById(id))?.data;
-      console.log(res);
-      setInstDetails(res);
-    };
+      let res = (await getInstrumentById(id))?.data
+      console.log(res)
+      setInstDetails(res)
+    }
     const fetchInstrumentMV = async (id: number) => {
-      let res = (await getMarketValuesById(id))?.data;
-      setInstMVs(res);
-    };
+      let res = (await getMarketValuesById(id))?.data
+      setInstMVs(res)
+    }
 
-    fetchInstrumentData(id as unknown as number);
-    fetchInstrumentMV(id as unknown as number);
-  }, [router.isReady]);
+    fetchInstrumentData((id as unknown) as number)
+    fetchInstrumentMV((id as unknown) as number)
+  }, [router.isReady])
 
   return (
     <div className="page__container flex relative ">
@@ -435,7 +433,7 @@ const InstrumentPage = () => {
         <div className="p-8 z-10 relative">
           <div className="flex items-center my-6">
             <h1 className="text-5xl text-white font-bold mr-2">
-              {instDetails ? instDetails["instrumentName"] : "Loading..."}
+              {instDetails ? instDetails['instrumentName'] : 'Loading...'}
             </h1>
             <IconButton
               // color="primary"
@@ -444,7 +442,6 @@ const InstrumentPage = () => {
               className="text-my-blue-2"
               onClick={() => {
                 setEditMode((prev) => !prev)
-
               }}
             >
               <EditIcon className="text-white w-8 h-8 mr-2" />
@@ -455,7 +452,7 @@ const InstrumentPage = () => {
               aria-label="Upload instrument data"
               className="text-my-blue-2"
               onClick={() => {
-                setShowDelModal(true);
+                setShowDelModal(true)
               }}
             >
               <DeleteForeverIcon className="text-white w-8 h-8" />
@@ -493,7 +490,7 @@ const InstrumentPage = () => {
           </div>
           <div className="flex">
             <div className="grow mr-2 w-2/3">
-              <div className={BlockClassName + " mb-4"}>
+              <div className={BlockClassName + ' mb-4'}>
                 <InstrumentChart
                   title={getGraphTitle(dataType)}
                   data={parseGraphMVData(instMVs)}
@@ -505,7 +502,7 @@ const InstrumentPage = () => {
               </div>
             </div>
             <div className="shrink-0 w-1/3 ml-2">
-              <div className={BlockClassName + " mb-4"}>
+              <div className={BlockClassName + ' mb-4  '}>
                 <InstrumentDetails instDetails={instDetails} />
               </div>
               <div className={BlockClassName}>
@@ -519,7 +516,7 @@ const InstrumentPage = () => {
       <Modal
         open={showDelModal}
         onClose={() => {
-          setShowDelModal(false);
+          setShowDelModal(false)
         }}
         closeAfterTransition
         className="h-full w-full flex justify-center items-center"
@@ -531,8 +528,8 @@ const InstrumentPage = () => {
               variant="outlined"
               className="text-my-red-1 border-my-red-1"
               onClick={() => {
-                instDetails ? delInstrument(instDetails["instrumentId"]) : 1;
-                window.location.replace("/instruments");
+                instDetails ? delInstrument(instDetails['instrumentId']) : 1
+                window.location.replace('/instruments')
               }}
             >
               Totally~
@@ -541,7 +538,7 @@ const InstrumentPage = () => {
         </Fade>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default InstrumentPage;
+export default InstrumentPage
