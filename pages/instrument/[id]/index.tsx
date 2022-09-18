@@ -264,7 +264,7 @@ const InstrumentPage = () => {
   // const [instDetails, setInstDetails] = useState(null);
   // const [instMVs, setInstMVs] = useState(null);
   const [myInvestmentValue, setMyInvVal] = useState(0);
-  // const [instrPnL, setInstrPnL] = useState(0);
+  const [instrPnL, setInstrPnL] = useState(0);
   const [instDetails, setInstDetails] = useState({});
   const [instMVs, setInstMVs] = useState([]);
   const [editMode, setEditMode] = useState(false);
