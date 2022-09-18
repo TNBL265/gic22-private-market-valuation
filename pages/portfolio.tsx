@@ -114,7 +114,10 @@ const PortfolioPage = () => {
     };
     const fetchPortfolioPnL = async () => {
       let res = (await getMyPortfolioPnL())?.data;
+      console.log("PNL")
+      
       setMyPnL(res);
+      console.log(myPnL)
     };
     fetchTotalValue();
     fetchPortfolioPnL();
@@ -162,7 +165,7 @@ const PortfolioPage = () => {
               </div>
             </div>
             <div>
-              <div>bttn</div>
+              <div>Date Range</div>
               <div>
                 <TextField
                   id="startDate"

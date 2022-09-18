@@ -156,7 +156,7 @@ const getMyInstrumentValue = async (instrumentId: number, start: string, end: st
     let res = await axios.get(
       `${BASE_URL}/analytics/investments/${instrumentId}/total-market-values?start=${start}&end=${end}`,
     )
-    console.log(res)
+    // console.log(res)
     return res['data']
   } catch (e) {
     return null
@@ -168,7 +168,7 @@ const getMyInstrumentPnL = async (instrumentId: string) => {
     console.log("getMyInstrumentPnL")
     let res = await axios.get(`${BASE_URL}/analytics/investments/${instrumentId}/pnl`)
     
-    console.log(res)
+    // console.log(res)
     return res['data']
   } catch (e) {
     return null

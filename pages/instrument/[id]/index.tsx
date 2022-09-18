@@ -124,7 +124,7 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
       <div>
         <TextField
           id="qty"
-          label="Quantity"
+          label="Quantity(Percentage)"
           type="number"
           InputLabelProps={{
             shrink: true,
