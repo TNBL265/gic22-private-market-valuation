@@ -12,18 +12,23 @@ import {
   getInstrumentById,
   getMarketValues,
   getMarketValuesById,
+  postTransactions,
 } from "../../../components/common/Apis";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const BlockClassName = "p-4 rounded-2xl bg-white relative z-10";
 
-const InstrumentBuySell = ({ instMVs }: any) => {
+const InstrumentBuySell = ({ id, instMVs }: any) => {
   const [qty, setQty] = useState(0);
   const [amt, setAmt] = useState(0);
+  const [transStats, setTransStats] = useState("none"); // either none, pending, failed or success
   // let latestMV = latestMVs?latestMVs[-1]:1;
   console.log("latestMVs");
   console.log(instMVs);
-  let mv = (instMVs && instMVs.length > 0) ? instMVs[instMVs.length - 1]["marketValue"] : 1;
+  let mv =
+    instMVs && instMVs.length > 0
+      ? instMVs[instMVs.length - 1]["marketValue"]
+      : 1;
   console.log(`mv: ${mv}`);
   const handleQtyChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,6 +49,52 @@ const InstrumentBuySell = ({ instMVs }: any) => {
     setQty(Math.floor(val / mv));
   };
 
+  const handleTransaction = async (isBuy: boolean) => {
+    let curAmt = amt;
+    if (isBuy) {
+      curAmt = -amt;
+    }
+    setTransStats("pending");
+    let res = await postTransactions({
+      data: {
+        instrumentId: id,
+        quantity: qty,
+        transactionAmount: curAmt,
+        transactionType: "BUY",
+        transactionDate: Date.now(),
+      },
+    });
+    console.log(res);
+
+    let status = res?.status;
+    if (status == 200) {
+      setTransStats("success");
+    } else {
+      setTransStats("failed");
+    }
+  };
+
+  const handleBuyClick = async (e: any) => {
+    e.preventDefault();
+    handleTransaction(true);
+  };
+
+  const handleSellClick = async (e: any) => {
+    e.preventDefault();
+    handleTransaction(false);
+  };
+  const StatusMsg = () => {
+    if (transStats == "success") {
+      return <div className="text-my-green-1">Transaction went through!</div>;
+    } else if (transStats == "failed") {
+      return (
+        <div className="text-my-red-1">Transaction DIDN'T went through!</div>
+      );
+    } else if (transStats == "pending") {
+      return <div className="text-my-gray-2">Attempting transaction</div>;
+    }
+    return <div></div>;
+  };
   return (
     <>
       <h2 className="text-xl my-2">Buy/Sell</h2>
@@ -75,21 +126,48 @@ const InstrumentBuySell = ({ instMVs }: any) => {
           onChange={handleAmtChange}
         />
       </div>
+      <StatusMsg />
       <div className="flex justify-around">
-        <Button
-          variant="outlined"
-          color="success"
-          className="text-my-green-1 border-my-green-1 mr-8"
-        >
-          BUY
-        </Button>
-        <Button
-          variant="outlined"
-          color="info"
-          className="text-my-orange-1 border-my-orange-1 ml-8"
-        >
-          SELL
-        </Button>
+        {transStats == "pending" ? (
+          <Button
+            variant="outlined"
+            color="success"
+            disabled
+            className=" mr-8"
+            onClick={handleBuyClick}
+          >
+            BUY
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="success"
+            className="text-my-green-1 border-my-green-1 mr-8"
+            onClick={handleBuyClick}
+          >
+            BUY
+          </Button>
+        )}
+        {transStats == "pending" ? (
+          <Button
+            variant="outlined"
+            color="info"
+            disabled
+            className=" ml-8"
+            onClick={handleSellClick}
+          >
+            SELL
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="info"
+            className="text-my-orange-1 border-my-orange-1 ml-8"
+            onClick={handleSellClick}
+          >
+            SELL
+          </Button>
+        )}
       </div>
       {/* </div> */}
     </>

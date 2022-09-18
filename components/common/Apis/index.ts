@@ -179,6 +179,7 @@ export {
   getTransactions,
   getTransactionsById,
   getTransactionsForInstrument,
+  postTransactions,
   getMyInstrumentValue,
   getMyInstrumentPnL,
   getMyPortfolioPnL
