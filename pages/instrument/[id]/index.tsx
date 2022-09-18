@@ -20,8 +20,9 @@ const BlockClassName = 'p-4 rounded-2xl bg-white relative z-10'
 const InstrumentBuySell = ({ latestMVs }: any) => {
   const [qty, setQty] = useState(0)
   const [amt, setAmt] = useState(0)
+  let latestMV = latestMVs?.length > 0 ? latestMVs[-1] : 0
   console.log(latestMV)
-  let latestMV = latestMVs[-1]
+
   let mv = latestMV ? latestMV['marketValue'] : 0
   console.log(`mv: ${mv}`)
   const handleQtyChange = (
