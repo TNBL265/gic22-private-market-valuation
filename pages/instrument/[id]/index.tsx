@@ -19,8 +19,10 @@ import {
   getInstrumentById,
   getMarketValues,
   getMarketValuesById,
+  getMyInstrumentPnLDate,
 } from '../../../components/common/Apis'
 import { ChangeEvent, useEffect, useState } from 'react'
+import Section from '../../../components/common/Section/Section'
 
 const BlockClassName = 'p-4 rounded-2xl bg-white relative z-10'
 
@@ -156,12 +158,26 @@ const parseGraphMVData = (data: any) => {
   })
 }
 
+const parseGraphMVDateForPNL = (data: any) => {
+  const res =  data?.map((el: any) => {
+    return {
+      x: el['marketValueDate'],
+      y: el['net_profitloss'],
+    }
+  })
+  console.log(res);
+  return res;
+}
+
 const InstrumentPage = () => {
   const router = useRouter()
   const [instDetails, setInstDetails] = useState({})
   const [instMVs, setInstMVs] = useState([])
   const [editMode, setEditMode] = useState(false)
   const [instrumentId, setInstrumentId] = useState<string>('')
+  const [startDate, setStartDate] = useState<string>('')
+  const [endDate, setEndDate] = useState<string>('')
+  const [netProfits, setNetProfits] = useState<any>()
 
   const [showDelModal, setShowDelModal] = useState(false)
   const [dataType, setDataType] = useState('MV')
@@ -257,6 +273,56 @@ const InstrumentPage = () => {
     )
   }
 
+  const submitDate = async (evt: any) => {
+    evt.preventDefault()
+    const start = startDate.replaceAll('-', '')
+    const end = endDate.replaceAll('-', '')
+    const res = await getMyInstrumentPnLDate(instrumentId, start, end)
+    setNetProfits(res['data'])
+    console.log(res)
+  }
+
+  const displayAnalytics = () => {
+    return (
+      <Section title="Analytics" size={'L'}>
+        <div>
+          <TextField
+            required
+            id="outlined-required"
+            name={'startDate'}
+            label={'Enter Start Date'}
+            value={startDate}
+            onChange={(e: any) => setStartDate(e.target.value)}
+          />
+          <TextField
+            required
+            id="outlined-required"
+            name={'endDate'}
+            label={'Enter Start Date'}
+            value={endDate}
+            onChange={(e: any) => setEndDate(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            color="success"
+            className="text-my-green-1 border-my-green-1 mr-8"
+            onClick={submitDate}
+          >
+            Submit
+          </Button>
+          <div className={BlockClassName + ' mb-4'}>
+            {netProfits && (
+              <InstrumentChart
+                title={'Net Profit/Loss'}
+                data={parseGraphMVDateForPNL(netProfits)}
+              />
+            )}
+          </div>
+        </div>
+      </Section>
+    )
+  }
+
   useEffect(() => {
     console.log(router.query)
     const id = router.query.id as string
@@ -349,6 +415,7 @@ const InstrumentPage = () => {
                 />
               </div>
               <div className={BlockClassName}>
+                {displayAnalytics()}
                 {instrumentId?.length > 0 && displayTransactions()}
               </div>
             </div>

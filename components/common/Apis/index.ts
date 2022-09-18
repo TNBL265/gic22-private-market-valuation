@@ -159,10 +159,25 @@ const getMyInstrumentValue = async (instrumentId: number) => {
   }
 }
 
-const getMyInstrumentPnL = async (instrumentId: number) => {
+const getMyInstrumentPnL = async (instrumentId: string) => {
   try {
     let res = await axios.get(
       `${BASE_URL}/analytics/investments/${instrumentId}/pnl`,
+    )
+    console.log(res)
+    return res['data']
+  } catch (e) {
+    return null
+  }
+}
+const getMyInstrumentPnLDate = async (
+  instrumentId: string,
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    let res = await axios.get(
+      `${BASE_URL}/analytics/investments/${instrumentId}/pnl?start=${startDate}&end=${endDate}`,
     )
     console.log(res)
     return res['data']
@@ -196,5 +211,6 @@ export {
   getTransactionsForInstrument,
   getMyInstrumentValue,
   getMyInstrumentPnL,
+  getMyInstrumentPnLDate,
   getMyPortfolioPnL,
 }
