@@ -3,7 +3,7 @@ from utils import format_datetime
 
 
 def create_an_instrument(data):
-    expectedKeys = ["instrumentName", "instrumentType", "country","sector", "instrumentCurrency", "isTradeable", "notes"]
+    expectedKeys = ["instrumentName", "instrumentType", "country","sector", "instrumentCurrency", "isTradeable"]
     for k in expectedKeys:
         if k not in data:
             return {
@@ -67,7 +67,9 @@ def update_an_instrument(instrumentId, data_obj):
 
 
 def delete_an_instrument(instrumentId):
-    InstrumentData.query.filter_by(instrumentId=instrumentId).delete()
+    instrument_list = InstrumentData.query.filter_by(instrumentId=instrumentId).all()
+    for instrument in instrument_list:
+        instrument.isDeleted = True
     db.session.commit()
     db.session.remove()
     db.session.close()
