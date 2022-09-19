@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, make_response, request
 
-from services import *
+from .services import *
 
 transactions_blueprint = Blueprint("transactions_api", __name__)
 

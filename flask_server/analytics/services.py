@@ -11,8 +11,8 @@ def retrieve_total_market_values(start, end, instrumentId):
     instruments = pd.read_sql("SELECT * FROM instrument_table", db.session.bind)
     market_values = pd.read_sql("SELECT * FROM market_value_table", db.session.bind)
     market_values["marketValueDate"] = pd.to_datetime(market_values["marketValueDate"])
-    start_date = pd.Timestamp(start)
-    end_date = pd.Timestamp(end)
+    start_date = pd.Timestamp(formatDateString(start))
+    end_date = pd.Timestamp(formatDateString(end))
     merged_df = pd.merge(left=market_values, right=instruments, left_on="instrumentId", right_on="instrumentId")
     merged_df = merged_df[["instrumentId", "instrumentName", "marketValue", "marketValueDate"]]
     merged_df = merged_df.loc[merged_df["instrumentId"] == instrumentId]
@@ -26,7 +26,7 @@ def retrieve_total_market_values(start, end, instrumentId):
 def retrieve_all_pnl_breakdown(date):
     market_values = pd.read_sql("SELECT * FROM market_value_table", db.session.bind)
     transactions = pd.read_sql("SELECT * FROM transaction_table", db.session.bind)
-    end_date = pd.Timestamp(date)
+    end_date = pd.Timestamp(formatDateString(date))
     market_values["marketValueDate"] = pd.to_datetime(market_values["marketValueDate"])
     market_values_less = market_values.loc[market_values["marketValueDate"] <= end_date]
     instrument_ids_list = list(set(market_values_less["instrumentId"].tolist()))
@@ -63,8 +63,8 @@ def retrieve_all_pnl_breakdown(date):
 def retrieve_single_pnl_breakdown(start, end, instrumentId):
     market_values = pd.read_sql("SELECT * FROM market_value_table", db.session.bind)
     transactions = pd.read_sql("SELECT * FROM transaction_table", db.session.bind)
-    start_date = pd.Timestamp(start)
-    end_date = pd.Timestamp(end)
+    start_date = pd.Timestamp(formatDateString(start))
+    end_date = pd.Timestamp(formatDateString(end))
     market_values["marketValueDate"] = pd.to_datetime(market_values["marketValueDate"])
     market_values = market_values.loc[market_values["instrumentId"] == instrumentId]
     market_values = market_values.loc[
@@ -102,3 +102,9 @@ def retrieve_single_pnl_breakdown(start, end, instrumentId):
 
 def nearest(items, pivot):
     return pd.to_datetime(min([i for i in items], key=lambda x: abs(x - pivot)))
+
+
+def formatDateString(date):
+    if "-" in date:
+        return "".join(date.split("-"))
+    return date
