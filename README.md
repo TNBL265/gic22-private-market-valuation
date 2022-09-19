@@ -56,10 +56,10 @@ npm run dev
 
 ## Acknowledgements
 - Hackers
-  - Sourabh Raj Jaiswal [@]srj31(https://github.com/srj31) (Frontend)
+  - Sourabh Raj Jaiswal [@srj31](https://github.com/srj31) (Frontend)
   - Jun Leong Hoe [@hjunleon](https://github.com/hjunleon) (Frontend)
   - Tran Nguyen Bao Long [@TNBL265](https://github.com/TNBL265) (Backend + DevOps)
-  - Ryan Khong [@celerie](https://github.com/celerie)
+  - Ryan Khong [@celerie](https://github.com/celerie) (Data Analyst)
 - Mentors
   - [John Tan Yeong Zhuang](https://www.linkedin.com/in/john-tan-yeong-zhuang/)
   - [Dennis Mathew Simon](https://www.linkedin.com/in/dennismathewsimon/?originalSubdomain=sg) 
