@@ -82,7 +82,7 @@ class TransactionData(db.Model):
     transactionId = db.Column(db.Integer, db.Identity(start=4954, cycle=True), primary_key=True)
     instrumentId = db.Column(db.Integer, db.ForeignKey('instrument_table.instrumentId'), nullable=False)
     quantity = db.Column(db.Float, nullable=False)
-    transactionDate = db.Column(db.DateTime, nullable=False)
+    transactionDate = db.Column(db.Date, nullable=False)
     transactionAmount = db.Column(db.Float, nullable=False)
     transactionType = db.Column(db.String, nullable=False)
     transactionCurrency = db.Column(db.String, nullable=False)
