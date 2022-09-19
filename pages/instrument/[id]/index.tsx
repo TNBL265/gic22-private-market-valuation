@@ -31,7 +31,7 @@ import Section from '../../../components/common/Section/Section'
 const BlockClassName = 'p-4 rounded-2xl bg-white relative z-10'
 
 const toDateString = (d: Date) => {
-  console.log("toDateString")
+  console.log('toDateString')
   console.log(d)
   return d.toISOString().split('T')[0]
 }
@@ -196,7 +196,6 @@ const InstrumentBuySell = ({ id, instMVs }: any) => {
 }
 
 const InstrumentDetails = ({ instDetails }: any) => {
-  console.log(instDetails)
   const Entry = ({ label, value }: any) => {
     return (
       <div className="flex justify-between text-sm font-semibold my-2">
@@ -263,19 +262,22 @@ const InstrumentPage = () => {
   const router = useRouter()
   // const [instDetails, setInstDetails] = useState(null);
   // const [instMVs, setInstMVs] = useState(null);
-  const [myInvestmentValue, setMyInvVal] = useState(0);
-  // const [instrPnL, setInstrPnL] = useState(0);
-  const [instDetails, setInstDetails] = useState({});
-  const [instMVs, setInstMVs] = useState([]);
-  const [editMode, setEditMode] = useState(false);
-  const [instrumentId, setInstrumentId] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>(toDateString(new Date(2020,1)));
-  const [endDate, setEndDate] = useState<string>(toDateString(new Date()));
-  const [netProfits, setNetProfits] = useState<any>(null);
+  const [myInvestmentValue, setMyInvVal] = useState(0)
+  const [instrPnL, setInstrPnL] = useState(0)
+  const [instDetails, setInstDetails] = useState({})
+  const [instMVs, setInstMVs] = useState([])
+  const [editMode, setEditMode] = useState(false)
+  const [instrumentId, setInstrumentId] = useState<string>('')
+  const [startDate, setStartDate] = useState<string>(
+    toDateString(new Date(2020, 1)),
+  )
+  const [endDate, setEndDate] = useState<string>(toDateString(new Date()))
+  const [netProfits, setNetProfits] = useState<any>(null)
 
   const [showDelModal, setShowDelModal] = useState(false)
   const [dataType, setDataType] = useState('MV')
   // const { id } = router.query
+  console.log(netProfits)
 
   const displayTransactions = () => {
     return <Transactions instrumentId={instrumentId} />
@@ -448,7 +450,7 @@ const InstrumentPage = () => {
     }
     const fetchMyPnL = async (id: number) => {
       let res = (await getMyInstrumentPnL(id))?.data
-      console.log(res)
+      console.log('This is hte profit and lost ', res)
       setInstrPnL(res)
     }
 
@@ -497,7 +499,9 @@ const InstrumentPage = () => {
             <div className="p-4 bg-white rounded-2xl flex items-center grow mr-4">
               <div className="">
                 <h4 className="text-2xl">PnL</h4>
-                <div className="text-my-green-1">{`${netProfits?netProfits[netProfits.length-1]:0}%`}</div>
+                <div className="text-my-green-1">{`${
+                  netProfits ? netProfits[netProfits.length - 1] : 0
+                }%`}</div>
               </div>
             </div>
 
