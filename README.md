@@ -2,19 +2,17 @@
 
 <!-- PROJECT LOGO -->
 <div align="center">
-    <h3>GIC #CODETOIMPACT 2022</h3>
-    <p align="center">
-        <br />
-        <a href="">Microservices Architecture</a>
-        .
-        <a href="">View Demo</a>
-    </p>
+    <h2>GIC #CODETOIMPACT 2022</h2>
+        <h3>1st runner-up</h3>
+    
 </div>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 An end-to-end private market valuation capabilities, which will allow for timely
 investment decision-making within a given window of opportunity.
+
+Check out our [presentation slides](presentation.pdf). 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
@@ -22,13 +20,13 @@ investment decision-making within a given window of opportunity.
 ### Prerequisites
 - [Node.js 12.22.0](https://nodejs.org/en/) or later
 - [Python 3.9](https://www.python.org/downloads/) or later
-### Installation
+### Installation (MacOS)
 1. Clone the repo
 ```shell
 git clone https://github.com/TNBL265/gic22-private-market-valuation.git
 cd gic22-private-market-valuation
 ```
-2. Start backend [flask_server](./flask_server)
+2. Start backend [flask_server](./flask_server) on a terminal
 - Setup virtual environment
 ```shell
 cd flask_server
@@ -38,19 +36,31 @@ pip install -r requirements.txt
 ```
 - Run flask
 ```shell
-flask run
+python wsgi.py
 ```
-3. Start next.js development server
+> For first run, open a different terminal to seed the local SQLite database first
+> ```shell
+> cd flask_server
+> python seed.py
+> ```
+3. Start frontend nextjs server on a terminal
+- Install packages
+```shell
+npm i -f
+```
+- Run nextjs
 ```shell
 npm run dev
-# or
-yarn run dev
-# or
-pnpm run dev
 ```
-### Sanity check:
-- Visit `http://localhost:3000/`
-  - [index.tsx](./pages/index.tsx) is fetching route `/instruments/`
-  - `/instruments/` is redirected to `http://127.0.0.1:5000/instruments` following `rewrites` specified in [next.config.js](./next.config.js) 
-- Visit `http://localhost:3000/api/hello.ts`
-  - run typescript API response under [pages/api/hello.ts](./pages/api/hello.ts)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Acknowledgements
+- Hackers
+  - Sourabh Raj Jaiswal [@]srj31(https://github.com/srj31) (Frontend)
+  - Jun Leong Hoe [@hjunleon](https://github.com/hjunleon) (Frontend)
+  - Tran Nguyen Bao Long [@TNBL265](https://github.com/TNBL265) (Backend + DevOps)
+  - Ryan Khong [@celerie](https://github.com/celerie)
+- Mentors
+  - [John Tan Yeong Zhuang](https://www.linkedin.com/in/john-tan-yeong-zhuang/)
+  - [Dennis Mathew Simon](https://www.linkedin.com/in/dennismathewsimon/?originalSubdomain=sg) 
+  - [Goh Wei Xiang](https://www.linkedin.com/in/gohweixiang/)
